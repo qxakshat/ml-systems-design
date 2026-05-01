@@ -1,0 +1,126 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="YouTube Video Search System" id="youtube-video-search">
+    <mxGraphModel dx="2074" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;YouTube Video Search System&lt;/b&gt;&lt;br&gt;L7 FAANG System Design" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="20" width="450" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scale -->
+        <mxCell id="scale-box" value="&lt;b&gt;Scale &amp; Requirements&lt;/b&gt;&lt;br&gt;- 800M+ videos indexed&lt;br&gt;- 5B+ searches/day&lt;br&gt;- 500+ hours uploaded/minute&lt;br&gt;- Latency: &lt;300ms for results page&lt;br&gt;- Multi-modal: text, audio, visual, ASR&lt;br&gt;- Multi-lingual: 100+ languages&lt;br&gt;- Freshness: new videos searchable &lt;5min&lt;br&gt;- Personalized ranking per user" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="340" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Tech Stack -->
+        <mxCell id="tech-stack" value="&lt;b&gt;Tech Stack&lt;/b&gt;&lt;br&gt;- Index: Google Spanner + custom sharding&lt;br&gt;- Embeddings: ScaNN (Scalable Nearest Neighbor)&lt;br&gt;- Training: JAX/Flax on TPU v4 pods&lt;br&gt;- Serving: TensorFlow Serving + Pathways&lt;br&gt;- Video processing: Borg + MapReduce&lt;br&gt;- Cache: Google Memcache (Bigtable)&lt;br&gt;- Stream: Google Pub/Sub&lt;br&gt;- Feature Store: Google Procella" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="340" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Data & Indexing -->
+        <mxCell id="data-title" value="&lt;b&gt;DATA PIPELINE &amp; VIDEO UNDERSTANDING&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="80" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="video-processing" value="&lt;b&gt;Video Feature Extraction&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Visual: ViT-L/14 frame embeddings (1fps)&lt;br&gt;- Audio: AST (Audio Spectrogram Transformer)&lt;br&gt;- ASR: Whisper-large transcription&lt;br&gt;- OCR: text-in-video extraction&lt;br&gt;- Scene detection: PySceneDetect&lt;br&gt;- Object/action: SlowFast + CLIP&lt;br&gt;- Thumbnail: representative frame selection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="120" width="280" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="text-signals" value="&lt;b&gt;Text Signals&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Title (highest weight)&lt;br&gt;- Description (first 200 chars)&lt;br&gt;- Tags, hashtags&lt;br&gt;- Auto-generated captions (ASR)&lt;br&gt;- Comment themes (topic extraction)&lt;br&gt;- Channel name &amp; category&lt;br&gt;- Chapter titles (timestamps)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="740" y="120" width="220" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="engagement-signals" value="&lt;b&gt;Engagement Signals&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Click-through rate (CTR)&lt;br&gt;- Watch time / completion rate&lt;br&gt;- Like/dislike ratio&lt;br&gt;- Share rate, saves&lt;br&gt;- Subscriber conversion&lt;br&gt;- Comment sentiment&lt;br&gt;- Retention curve shape" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="300" width="220" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="indexing" value="&lt;b&gt;Indexing Pipeline&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Inverted index (BM25 on text)&lt;br&gt;- Dense vector index (ScaNN/FAISS)&lt;br&gt;- Hybrid: sparse + dense retrieval&lt;br&gt;- Sharded by hash(video_id)&lt;br&gt;- Incremental index updates (streaming)&lt;br&gt;- Tiered index: hot/warm/cold" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="680" y="300" width="240" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Model Architecture -->
+        <mxCell id="model-title" value="&lt;b&gt;MODEL ARCHITECTURE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="80" width="380" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="query-tower" value="&lt;b&gt;Query Understanding Tower&lt;/b&gt;&lt;br&gt;&lt;br&gt;- BERT-base encoder (12 layers, 110M)&lt;br&gt;- Query expansion (related terms)&lt;br&gt;- Intent classification (navigational,&lt;br&gt;  informational, entertainment)&lt;br&gt;- Spell correction + normalization&lt;br&gt;- Language detection (mBERT)&lt;br&gt;- Output: 256-d query embedding" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="120" width="280" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="video-tower" value="&lt;b&gt;Video Understanding Tower&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Multi-modal fusion:&lt;br&gt;  - Text embed (title+desc): BERT → 256-d&lt;br&gt;  - Visual embed (frames): ViT → 256-d&lt;br&gt;  - Audio embed: AST → 128-d&lt;br&gt;- Cross-attention fusion (Transformer)&lt;br&gt;- Final projection: 256-d video embed&lt;br&gt;- Trained with contrastive loss (InfoNCE)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="280" width="280" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="two-tower" value="&lt;b&gt;Two-Tower Retrieval Model&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Query tower ⊕ Video tower&lt;br&gt;- Similarity: cosine(q_embed, v_embed)&lt;br&gt;- Training: in-batch negatives (4096)&lt;br&gt;- Hard negatives: top BM25 non-clicks&lt;br&gt;- Loss: softmax cross-entropy&lt;br&gt;- ANN index: ScaNN with 4-bit PQ&lt;br&gt;- Retrieve top-1000 candidates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="450" width="280" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ranking" value="&lt;b&gt;Ranking Model (Cross-Encoder)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Architecture: Cross-attention Transformer&lt;br&gt;- Input: [query; video_features]&lt;br&gt;- Features (200+):&lt;br&gt;  - Relevance score (semantic match)&lt;br&gt;  - Quality score (production value)&lt;br&gt;  - Freshness (upload recency)&lt;br&gt;  - Authority (channel quality)&lt;br&gt;  - Personalization (user history)&lt;br&gt;  - Engagement predictions (CTR, watch%)&lt;br&gt;- Multi-objective: relevance + satisfaction" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="610" width="280" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- Training -->
+        <mxCell id="training-title" value="&lt;b&gt;TRAINING DETAILS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="80" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-retrieval" value="&lt;b&gt;Retrieval Model Training&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Data: 10B+ query-click pairs (90 days)&lt;br&gt;- Optimizer: Adafactor (lr=1e-3)&lt;br&gt;- Batch: 4096 (TPU v4, 256 chips)&lt;br&gt;- In-batch negatives + hard negatives&lt;br&gt;- Temperature: τ=0.07 (learned)&lt;br&gt;- Training: 500K steps (~3 days)&lt;br&gt;- Refreshed weekly" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="120" width="280" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-ranking" value="&lt;b&gt;Ranking Model Training&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Data: impression logs with engagement&lt;br&gt;- Labels: {click, long_watch, short_click}&lt;br&gt;- Multi-task heads:&lt;br&gt;  - P(click) — binary CE&lt;br&gt;  - E[watch_time] — regression (Huber)&lt;br&gt;  - P(satisfied) — binary CE&lt;br&gt;- Position bias correction (IPW)&lt;br&gt;- Refreshed daily (incremental)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="280" width="280" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Serving -->
+        <mxCell id="serving-title" value="&lt;b&gt;SERVING PIPELINE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="480" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="serving-flow" value="&lt;b&gt;Online Serving Flow&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. Query preprocessing (10ms)&lt;br&gt;   - Tokenize, normalize, spell-correct&lt;br&gt;2. Retrieval - parallel:&lt;br&gt;   - BM25 inverted index (20ms)&lt;br&gt;   - Dense ANN search (30ms)&lt;br&gt;   - Merge &amp; deduplicate (~1000 candidates)&lt;br&gt;3. Feature assembly (20ms)&lt;br&gt;4. Ranking model inference (50ms)&lt;br&gt;5. Re-ranking: diversity + policy (10ms)&lt;br&gt;6. Return top-20 results&lt;br&gt;Total: ~150ms P50, ~300ms P99" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="520" width="280" height="230" as="geometry" />
+        </mxCell>
+
+        <mxCell id="personalization" value="&lt;b&gt;Personalization&lt;/b&gt;&lt;br&gt;&lt;br&gt;- User watch history embedding&lt;br&gt;- Subscribed channels boost&lt;br&gt;- Language/region preference&lt;br&gt;- Time-of-day patterns&lt;br&gt;- Search history context&lt;br&gt;- Collaborative filtering signals" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="740" y="520" width="220" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Metrics -->
+        <mxCell id="metrics-title" value="&lt;b&gt;METRICS &amp; TRADEOFFS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="780" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="metrics" value="&lt;b&gt;Evaluation Metrics&lt;/b&gt;&lt;br&gt;&lt;br&gt;- NDCG@5, NDCG@10 (relevance)&lt;br&gt;- MRR (first relevant result)&lt;br&gt;- Recall@1000 (retrieval coverage)&lt;br&gt;- Satisfied clicks (watch &gt; 30s)&lt;br&gt;- Abandonment rate&lt;br&gt;- Query reformulation rate (lower=better)&lt;br&gt;- Long-click rate (watch &gt; 50%)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="820" width="260" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tradeoffs" value="&lt;b&gt;Key Tradeoffs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Relevance vs Engagement (clickbait)&lt;br&gt;- Freshness vs Quality (new uploads)&lt;br&gt;- Personalization vs Exploration&lt;br&gt;- Latency vs Ranking depth&lt;br&gt;- Dense retrieval accuracy vs Index size&lt;br&gt;- Multi-modal richness vs Compute cost&lt;br&gt;- Creator fairness vs User satisfaction" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="820" width="260" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="video-processing" target="indexing" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="text-signals" target="video-tower" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="query-tower" target="two-tower" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="video-tower" target="two-tower" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="two-tower" target="ranking" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="ranking" target="serving-flow" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

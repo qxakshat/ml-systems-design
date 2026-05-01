@@ -1,0 +1,133 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="Content Synthesis and RAG System" id="rag-system">
+    <mxGraphModel dx="2074" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Content Synthesis &amp; Retrieval-Augmented Generation (RAG)&lt;/b&gt;&lt;br&gt;L7 FAANG System Design" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="950" y="20" width="650" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scale -->
+        <mxCell id="scale-box" value="&lt;b&gt;Scale &amp; Requirements&lt;/b&gt;&lt;br&gt;- 100M+ queries/day (enterprise + consumer)&lt;br&gt;- Corpus: 10B+ documents (web-scale)&lt;br&gt;- Latency: &lt;2s for grounded response&lt;br&gt;- Freshness: new docs indexed &lt;1 hour&lt;br&gt;- Accuracy: verifiable citations required&lt;br&gt;- Hallucination rate: &lt;5% (grounded)&lt;br&gt;- Multi-modal: text, tables, images, PDFs&lt;br&gt;- Multi-tenant: per-org knowledge bases" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="360" height="185" as="geometry" />
+        </mxCell>
+
+        <!-- Tech Stack -->
+        <mxCell id="tech-stack" value="&lt;b&gt;Tech Stack&lt;/b&gt;&lt;br&gt;- Vector DB: Pinecone / Weaviate / Qdrant&lt;br&gt;- Embeddings: OpenAI ada-002 / E5-large&lt;br&gt;- LLM: GPT-4 / Claude / Llama-3 (70B)&lt;br&gt;- Chunking: LangChain / LlamaIndex&lt;br&gt;- Orchestration: LangGraph / DSPy&lt;br&gt;- Document processing: Unstructured.io&lt;br&gt;- Serving: FastAPI + Ray Serve&lt;br&gt;- Monitoring: LangSmith / Phoenix (Arize)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="285" width="360" height="175" as="geometry" />
+        </mxCell>
+
+        <!-- Data Pipeline -->
+        <mxCell id="data-title" value="&lt;b&gt;INGESTION &amp; INDEXING PIPELINE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="320" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="doc-processing" value="&lt;b&gt;Document Processing&lt;/b&gt;&lt;br&gt;&lt;br&gt;- PDF: PyMuPDF + layout detection&lt;br&gt;- HTML: trafilatura (content extraction)&lt;br&gt;- Tables: Camelot / Tabula → structured&lt;br&gt;- Images: OCR (Tesseract) + CLIP caption&lt;br&gt;- Code: AST parsing, function-level chunks&lt;br&gt;- Slides: PPTX element extraction&lt;br&gt;- Metadata extraction (author, date, title)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="250" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="chunking" value="&lt;b&gt;Chunking Strategies&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Semantic chunking (embedding similarity)&lt;br&gt;- Recursive character splitter (fallback)&lt;br&gt;- Chunk size: 512 tokens (optimal)&lt;br&gt;- Overlap: 50 tokens (context continuity)&lt;br&gt;- Hierarchical: document → section → para&lt;br&gt;- Late chunking (embed full, split after)&lt;br&gt;- Parent-child: retrieve child, return parent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="120" width="240" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="embedding" value="&lt;b&gt;Embedding &amp; Indexing&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Embedding model: E5-large-v2 (1024-d)&lt;br&gt;- Instruction-tuned (query vs passage prefix)&lt;br&gt;- Matryoshka (truncate to 256-d for speed)&lt;br&gt;- Index: HNSW (ef_construction=200, M=32)&lt;br&gt;- Hybrid: dense + sparse (BM25/SPLADE)&lt;br&gt;- Metadata filtering (date, source, tenant)&lt;br&gt;- Incremental indexing (CDC pipeline)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="290" width="250" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="query-processing" value="&lt;b&gt;Query Processing&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Query rewriting (LLM expansion)&lt;br&gt;- HyDE: hypothetical doc generation&lt;br&gt;- Multi-query: decompose complex query&lt;br&gt;- Step-back: abstract then ground&lt;br&gt;- Query classification (factoid/complex/multi-hop)&lt;br&gt;- Conversation history → standalone query" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="290" width="240" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Model Architecture -->
+        <mxCell id="model-title" value="&lt;b&gt;RAG ARCHITECTURE (Advanced Patterns)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="80" width="380" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="retrieval-stage" value="&lt;b&gt;Retrieval Stage (Multi-Strategy)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Dense retrieval: bi-encoder ANN search&lt;br&gt;- Sparse retrieval: BM25 / SPLADE&lt;br&gt;- Hybrid fusion: RRF (k=60)&lt;br&gt;  - score = Σ 1/(k + rank_i)&lt;br&gt;- Multi-hop: iterative retrieval (2-3 hops)&lt;br&gt;- Knowledge graph traversal (structured)&lt;br&gt;- Retrieve top-20 chunks per strategy&lt;br&gt;- Total candidates: ~50-100 chunks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="120" width="310" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="reranking" value="&lt;b&gt;Re-Ranking (Cross-Encoder)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Model: BGE-reranker-v2 / Cohere rerank&lt;br&gt;- Cross-encoder: [query; passage] → score&lt;br&gt;- Score top-50 candidates → keep top-5&lt;br&gt;- Diversity: MMR (λ=0.5) deduplication&lt;br&gt;- Relevance threshold: drop if score &lt; 0.3&lt;br&gt;- Context window budget: allocate proportionally" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="300" width="310" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="generation" value="&lt;b&gt;Generation (Grounded LLM)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Prompt template:&lt;br&gt;  [system] You are a helpful assistant.&lt;br&gt;  Answer based ONLY on the provided context.&lt;br&gt;  Cite sources using [1], [2], etc.&lt;br&gt;  [context] {retrieved_chunks}&lt;br&gt;  [user] {query}&lt;br&gt;&lt;br&gt;- LLM: GPT-4o / Claude 3.5 / Llama-3-70B&lt;br&gt;- Temperature: 0.1 (factual, low creativity)&lt;br&gt;- Max tokens: 1024 (response length)&lt;br&gt;- Streaming output (SSE to client)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="440" width="310" height="210" as="geometry" />
+        </mxCell>
+
+        <mxCell id="advanced-patterns" value="&lt;b&gt;Advanced RAG Patterns&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Corrective RAG: verify retrieval quality&lt;br&gt;  - If low confidence → web search fallback&lt;br&gt;- Self-RAG: model decides when to retrieve&lt;br&gt;- Adaptive RAG: route by query complexity&lt;br&gt;- Graph RAG: knowledge graph + vector DB&lt;br&gt;- Agentic RAG: tool use + multi-step reasoning&lt;br&gt;- RAPTOR: hierarchical summarization tree" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="660" width="310" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Training -->
+        <mxCell id="training-title" value="&lt;b&gt;TRAINING &amp; OPTIMIZATION&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="80" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="embedding-training" value="&lt;b&gt;Embedding Model Training&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Base: BERT-large / Mistral-7B (backbone)&lt;br&gt;- Contrastive learning (InfoNCE)&lt;br&gt;- Hard negatives: BM25 top-100 non-relevant&lt;br&gt;- In-batch negatives: batch=32768&lt;br&gt;- Multi-task: retrieval + classification + STS&lt;br&gt;- Training data: MS MARCO + domain-specific&lt;br&gt;- Matryoshka loss (multi-dim objective)&lt;br&gt;- Instruction-tuning for query/passage asymmetry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="120" width="300" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rag-optimization" value="&lt;b&gt;RAG Pipeline Optimization&lt;/b&gt;&lt;br&gt;&lt;br&gt;- DSPy: programmatic prompt optimization&lt;br&gt;- RAGAS evaluation framework:&lt;br&gt;  - Faithfulness: answer grounded in context?&lt;br&gt;  - Answer relevancy: addresses query?&lt;br&gt;  - Context precision: retrieved relevant?&lt;br&gt;  - Context recall: missed relevant docs?&lt;br&gt;- End-to-end fine-tuning (retriever + generator)&lt;br&gt;- Retriever distillation from reader signal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="305" width="300" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="hallucination" value="&lt;b&gt;Hallucination Mitigation&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Inline citations (force attribution)&lt;br&gt;- NLI verification (entailment check)&lt;br&gt;- Confidence scoring per claim&lt;br&gt;- Abstention: &quot;I don't have enough info&quot;&lt;br&gt;- Fact-checking pipeline (post-generation)&lt;br&gt;- Self-consistency (sample + vote)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="485" width="300" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Serving -->
+        <mxCell id="serving-title" value="&lt;b&gt;SERVING ARCHITECTURE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="475" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="serving" value="&lt;b&gt;End-to-End Flow&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. Query arrives → classification (simple/complex)&lt;br&gt;2. Query rewriting (if conversational) (50ms)&lt;br&gt;3. Parallel retrieval:&lt;br&gt;   - Dense ANN search (100ms)&lt;br&gt;   - Sparse BM25 search (50ms)&lt;br&gt;   - Knowledge graph lookup (80ms)&lt;br&gt;4. RRF fusion + Re-ranking (150ms)&lt;br&gt;5. Context assembly (top-5 chunks)&lt;br&gt;6. LLM generation (streaming, 500-1500ms)&lt;br&gt;7. Citation verification (async)&lt;br&gt;&lt;br&gt;Total TTFT: ~400ms, full response: ~2s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="515" width="280" height="240" as="geometry" />
+        </mxCell>
+
+        <mxCell id="caching" value="&lt;b&gt;Caching &amp; Optimization&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Semantic cache (similar queries → cached)&lt;br&gt;- Embedding cache (hot documents)&lt;br&gt;- KV-cache sharing (common prefixes)&lt;br&gt;- Pre-computed answers (FAQ-like)&lt;br&gt;- Tiered serving: small LLM → large (cascade)&lt;br&gt;- Async citation verification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="750" y="515" width="220" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Metrics -->
+        <mxCell id="metrics-title" value="&lt;b&gt;METRICS &amp; TRADEOFFS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="785" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="metrics" value="&lt;b&gt;Evaluation Metrics (RAGAS Framework)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Faithfulness: % claims supported by context&lt;br&gt;- Answer Relevancy: semantic sim to query&lt;br&gt;- Context Precision: relevant / retrieved&lt;br&gt;- Context Recall: relevant retrieved / total relevant&lt;br&gt;- Hallucination rate (unsupported claims)&lt;br&gt;- Citation accuracy (verifiable references)&lt;br&gt;- User satisfaction (thumbs up/down)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="825" width="280" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tradeoffs" value="&lt;b&gt;Key Tradeoffs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Recall (more context) vs Precision (noise)&lt;br&gt;- Chunk size: small (precise) vs large (context)&lt;br&gt;- Latency vs Quality (more retrieval hops)&lt;br&gt;- Faithfulness vs Fluency (over-constrained)&lt;br&gt;- Cost (LLM tokens) vs Response quality&lt;br&gt;- Freshness (re-index) vs Index stability&lt;br&gt;- Abstention (safety) vs Helpfulness" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="750" y="825" width="260" height="155" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="doc-processing" target="chunking" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="chunking" target="embedding" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="query-processing" target="retrieval-stage" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="retrieval-stage" target="reranking" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="reranking" target="generation" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="generation" target="serving" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="embedding" target="retrieval-stage" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

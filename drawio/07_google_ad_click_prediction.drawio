@@ -1,0 +1,119 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="Google Ad Click Prediction" id="google-ad-click">
+    <mxGraphModel dx="2074" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Google's Ad Click Prediction (CTR/CVR)&lt;/b&gt;&lt;br&gt;L7 FAANG System Design" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="20" width="520" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scale -->
+        <mxCell id="scale-box" value="&lt;b&gt;Scale &amp; Requirements&lt;/b&gt;&lt;br&gt;- 8.5B+ searches/day → ad auctions&lt;br&gt;- ~100B ad impressions/day (Search+Display)&lt;br&gt;- Latency: &lt;10ms per ad scoring (auction)&lt;br&gt;- Revenue: $224B/year (precision matters)&lt;br&gt;- Billions of features (sparse)&lt;br&gt;- Real-time feedback (click stream)&lt;br&gt;- Calibration critical (bid = pCTR × bid)&lt;br&gt;- Multi-format: search, display, video, shopping" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="360" height="185" as="geometry" />
+        </mxCell>
+
+        <!-- Tech Stack -->
+        <mxCell id="tech-stack" value="&lt;b&gt;Tech Stack&lt;/b&gt;&lt;br&gt;- Training: TensorFlow + TPU pods&lt;br&gt;- Serving: custom C++ inference (low latency)&lt;br&gt;- Feature Store: Spanner + Bigtable&lt;br&gt;- Stream: Google Pub/Sub + Dataflow&lt;br&gt;- Embedding tables: distributed PS&lt;br&gt;- Experiment: Vizier (hyperparameter)&lt;br&gt;- Monitoring: Monarch time series&lt;br&gt;- Pipeline: TFX (ML pipelines)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="285" width="360" height="175" as="geometry" />
+        </mxCell>
+
+        <!-- Data -->
+        <mxCell id="data-title" value="&lt;b&gt;DATA &amp; FEATURE ENGINEERING&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="320" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="query-features" value="&lt;b&gt;Query-Side Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Query text embedding (BERT)&lt;br&gt;- Query intent (commercial vs info)&lt;br&gt;- Query frequency (head vs tail)&lt;br&gt;- Historical CTR for this query&lt;br&gt;- Location, language, device&lt;br&gt;- Time of day, day of week&lt;br&gt;- Session context (prior queries)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="230" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ad-features" value="&lt;b&gt;Ad-Side Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Ad creative text embedding&lt;br&gt;- Landing page quality score&lt;br&gt;- Historical CTR (smoothed)&lt;br&gt;- Advertiser quality &amp; trust&lt;br&gt;- Ad format (text, image, video)&lt;br&gt;- Bid amount &amp; budget remaining&lt;br&gt;- Keyword match type (exact/broad)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="700" y="120" width="230" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cross-features" value="&lt;b&gt;Cross Features (Interactions)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Query×Ad relevance (semantic match)&lt;br&gt;- User×Ad affinity (past interactions)&lt;br&gt;- Query×Advertiser historical CTR&lt;br&gt;- Position×Device click bias&lt;br&gt;- Billions of sparse feature crosses&lt;br&gt;- Feature hashing (MurmurHash3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="290" width="250" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="user-features" value="&lt;b&gt;User Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Demographics (age, gender inferred)&lt;br&gt;- Interest segments (in-market, affinity)&lt;br&gt;- Browser/search history (privacy-safe)&lt;br&gt;- Past ad interactions (click/convert)&lt;br&gt;- Device, OS, connection type&lt;br&gt;- Geographic signals" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="290" width="220" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Model -->
+        <mxCell id="model-title" value="&lt;b&gt;MODEL ARCHITECTURE (Deep CTR)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="80" width="380" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="deep-model" value="&lt;b&gt;Deep &amp; Cross Network v2 (DCN-v2)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Embedding layer:&lt;br&gt;  - Categorical → trainable embeddings&lt;br&gt;  - Embedding dim: 16-64 per feature&lt;br&gt;  - Billions of embedding parameters&lt;br&gt;  - Distributed embedding (model parallel)&lt;br&gt;&lt;br&gt;- Cross Network (explicit interactions):&lt;br&gt;  - 6 cross layers&lt;br&gt;  - Low-rank mixture of experts&lt;br&gt;&lt;br&gt;- Deep Network (implicit patterns):&lt;br&gt;  - 8 FC layers: 2048→1024→512→256&lt;br&gt;  - ReLU activation, batch norm&lt;br&gt;&lt;br&gt;- Combination: concat → logit → sigmoid" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="120" width="320" height="280" as="geometry" />
+        </mxCell>
+
+        <mxCell id="multi-task" value="&lt;b&gt;Multi-Task Learning (MMOE)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Shared bottom (expert networks)&lt;br&gt;- Task-specific towers:&lt;br&gt;  - P(click) — primary CTR&lt;br&gt;  - P(conversion) — CVR&lt;br&gt;  - P(post-click engagement)&lt;br&gt;  - E[revenue] — value prediction&lt;br&gt;- Mixture-of-Experts gating per task&lt;br&gt;- 8 expert networks, each 3 layers&lt;br&gt;- ESMM: entire space multi-task (CVR)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="410" width="320" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="calibration" value="&lt;b&gt;Calibration &amp; Position Bias&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Platt scaling (isotonic regression)&lt;br&gt;- Position bias: P(click) = P(exam)×P(rel)&lt;br&gt;- Propensity scoring (IPS debiasing)&lt;br&gt;- Calibration bins: 1000 quantiles&lt;br&gt;- Expected Calibration Error &lt; 0.01&lt;br&gt;- Critical: ranking score = pCTR × bid" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="595" width="320" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Training -->
+        <mxCell id="training-title" value="&lt;b&gt;TRAINING DETAILS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="80" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-config" value="&lt;b&gt;Training Configuration&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Data: 1T+ examples (30 days)&lt;br&gt;- Optimizer: Adagrad (lr=0.01) — sparse&lt;br&gt;- Batch: 65536 (TPU v4 pods)&lt;br&gt;- Label: click (1) / no-click (0)&lt;br&gt;- Negative downsampling: 100:1 ratio&lt;br&gt;  - Calibration correction applied&lt;br&gt;- Continuous training (streaming)&lt;br&gt;- Model push: every few hours" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="120" width="280" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-infra" value="&lt;b&gt;Training Infrastructure&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Model size: 10B+ parameters&lt;br&gt;- Embedding tables: 100s of TB&lt;br&gt;- Distributed parameter server (PS)&lt;br&gt;- Data parallelism + model parallelism&lt;br&gt;- Feature importance pruning (weekly)&lt;br&gt;- Warm-starting from previous model&lt;br&gt;- Online learning: FTRL (Follow The Reg Leader)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="305" width="280" height="155" as="geometry" />
+        </mxCell>
+
+        <!-- Auction -->
+        <mxCell id="auction-title" value="&lt;b&gt;AD AUCTION &amp; SERVING&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="450" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="auction" value="&lt;b&gt;Auction Mechanism&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Generalized Second Price (GSP) auction&lt;br&gt;- Ad Rank = pCTR × Bid × Quality Score&lt;br&gt;- Quality Score: relevance + LP quality + CTR&lt;br&gt;- Minimum bid thresholds&lt;br&gt;- Budget pacing (smooth delivery)&lt;br&gt;- Real-time bidding (RTB) for display&lt;br&gt;&lt;br&gt;Latency: &lt;10ms for full auction&lt;br&gt;Candidates: 100-1000 ads per query" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="490" width="270" height="185" as="geometry" />
+        </mxCell>
+
+        <mxCell id="serving-opt" value="&lt;b&gt;Serving Optimizations&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Cascade scoring: cheap → expensive&lt;br&gt;- Pre-computed ad embeddings&lt;br&gt;- Feature caching (user features: 1hr)&lt;br&gt;- Quantized model (INT8 inference)&lt;br&gt;- Custom ASIC (TPU inference)&lt;br&gt;- Early termination (budget exhausted)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="740" y="490" width="230" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Metrics -->
+        <mxCell id="metrics-title" value="&lt;b&gt;METRICS &amp; TRADEOFFS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="710" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="metrics" value="&lt;b&gt;Evaluation Metrics&lt;/b&gt;&lt;br&gt;&lt;br&gt;- AUC-ROC (discrimination)&lt;br&gt;- Log loss / Cross-entropy (calibration)&lt;br&gt;- Normalized Entropy (NE)&lt;br&gt;- Calibration (predicted/actual CTR ratio)&lt;br&gt;- Revenue per mille (RPM)&lt;br&gt;- Advertiser ROI (conversions/spend)&lt;br&gt;- User experience: ads relevance rating" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="750" width="260" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tradeoffs" value="&lt;b&gt;Key Tradeoffs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Revenue vs User experience (ad load)&lt;br&gt;- Model freshness vs Stability&lt;br&gt;- Feature richness vs Latency (&lt;10ms!)&lt;br&gt;- Calibration vs Discrimination&lt;br&gt;- Advertiser fairness vs Revenue max&lt;br&gt;- Privacy (less data) vs Targeting accuracy&lt;br&gt;- Exploration (new ads) vs Exploitation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="730" y="750" width="260" height="155" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="query-features" target="deep-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="ad-features" target="deep-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="deep-model" target="multi-task" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="multi-task" target="calibration" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="calibration" target="auction" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,115 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="Walmart Product Suggestions (Retrieval + Ranking)" id="walmart-product-suggestions">
+    <mxGraphModel dx="2074" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Walmart Product Suggestions (Retrieval + Ranking System)&lt;/b&gt;&lt;br&gt;L7 FAANG System Design" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="20" width="620" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scale -->
+        <mxCell id="scale-box" value="&lt;b&gt;Scale &amp; Requirements&lt;/b&gt;&lt;br&gt;- 500M+ products in catalog&lt;br&gt;- 150M+ weekly customers (omnichannel)&lt;br&gt;- 1B+ search queries/day&lt;br&gt;- Latency: &lt;100ms retrieval, &lt;50ms ranking&lt;br&gt;- Omnichannel: web, app, in-store, pickup&lt;br&gt;- Real-time inventory awareness&lt;br&gt;- Geo-local: store-specific availability&lt;br&gt;- Sponsored products integration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="350" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Tech Stack -->
+        <mxCell id="tech-stack" value="&lt;b&gt;Tech Stack&lt;/b&gt;&lt;br&gt;- Training: PyTorch + Spark (Elements/GCP)&lt;br&gt;- Serving: Vespa (retrieval) + Triton (ranking)&lt;br&gt;- Index: Vespa ANN (HNSW) + BM25&lt;br&gt;- Feature Store: Feast + Redis&lt;br&gt;- Stream: Kafka + Flink (real-time)&lt;br&gt;- Data Lake: GCS + BigQuery&lt;br&gt;- Orchestration: Airflow + K8s (IDC)&lt;br&gt;- Experiment: internal A/B platform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="350" height="175" as="geometry" />
+        </mxCell>
+
+        <!-- Data -->
+        <mxCell id="data-title" value="&lt;b&gt;DATA &amp; FEATURE ENGINEERING&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="80" width="320" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="product-features" value="&lt;b&gt;Product Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Title, description, brand, category&lt;br&gt;- Product embedding (BERT on title+desc)&lt;br&gt;- Image embedding (ViT / CLIP)&lt;br&gt;- Price, rating, review count&lt;br&gt;- Attributes (color, size, material)&lt;br&gt;- Availability (store-level real-time)&lt;br&gt;- Sales velocity (7d, 30d, 90d)&lt;br&gt;- Fulfillment: ship, pickup, delivery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="120" width="250" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="user-features" value="&lt;b&gt;User/Query Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Search query embedding&lt;br&gt;- Purchase history (90 days)&lt;br&gt;- Browse/click history (session)&lt;br&gt;- Cart contents (current)&lt;br&gt;- User segments (budget/premium)&lt;br&gt;- Location → nearest store&lt;br&gt;- Channel (web, app, in-store kiosk)&lt;br&gt;- Reorder patterns (consumables)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="710" y="120" width="240" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="behavioral-data" value="&lt;b&gt;Behavioral Signals&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Click-through rate (query×product)&lt;br&gt;- Add-to-cart rate&lt;br&gt;- Purchase conversion rate&lt;br&gt;- Dwell time on PDP&lt;br&gt;- Return rate (negative signal)&lt;br&gt;- Co-purchase affinity matrix&lt;br&gt;- Substitute/complement relationships" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="310" width="250" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Model Architecture -->
+        <mxCell id="model-title" value="&lt;b&gt;MODEL ARCHITECTURE (Two-Stage)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="80" width="380" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="retrieval" value="&lt;b&gt;Stage 1: Retrieval (Candidate Generation)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Two-Tower Architecture:&lt;br&gt;  - Query tower: BERT-base → 256-d&lt;br&gt;  - Product tower: title+img → 256-d&lt;br&gt;  - Trained with in-batch negatives&lt;br&gt;&lt;br&gt;- Hybrid retrieval (parallel):&lt;br&gt;  - Lexical: BM25 on title+desc (Vespa)&lt;br&gt;  - Semantic: ANN on dense embeddings&lt;br&gt;  - Behavioral: co-click graph (item2vec)&lt;br&gt;&lt;br&gt;- Retrieve: 1000 candidates in &lt;50ms&lt;br&gt;- ANN: HNSW index (Vespa, ef=200)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="120" width="320" height="230" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ranking" value="&lt;b&gt;Stage 2: Ranking (Personalized Scoring)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Architecture: Multi-gate MoE (MMoE)&lt;br&gt;- Input features (300+):&lt;br&gt;  - Query-product relevance (cross-encoder)&lt;br&gt;  - User-product affinity&lt;br&gt;  - Price competitiveness&lt;br&gt;  - Freshness &amp; trending&lt;br&gt;  - Fulfillment match (pickup avail?)&lt;br&gt;&lt;br&gt;- Multi-task objectives:&lt;br&gt;  - P(click) — engagement&lt;br&gt;  - P(add_to_cart) — intent&lt;br&gt;  - P(purchase) — conversion (pCVR)&lt;br&gt;  - E[revenue] — business value&lt;br&gt;- Final score: weighted combination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="360" width="320" height="250" as="geometry" />
+        </mxCell>
+
+        <mxCell id="reranking" value="&lt;b&gt;Stage 3: Re-Ranking &amp; Business Logic&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Diversity: category dedup (MMR)&lt;br&gt;- Sponsored product injection (slots)&lt;br&gt;- Inventory filter (in-stock only)&lt;br&gt;- Price-range filtering&lt;br&gt;- Brand boost/suppression rules&lt;br&gt;- Walmart+ member benefits boost&lt;br&gt;- A/B experiment allocation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="620" width="320" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Training -->
+        <mxCell id="training-title" value="&lt;b&gt;TRAINING DETAILS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="80" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-retrieval" value="&lt;b&gt;Retrieval Model Training&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Data: click pairs (query, clicked_product)&lt;br&gt;- Negatives: in-batch + hard (impressed, not clicked)&lt;br&gt;- Optimizer: Adam (lr=5e-5) + warmup&lt;br&gt;- Batch: 4096 (8×A100 GPU)&lt;br&gt;- Contrastive loss (temperature=0.05)&lt;br&gt;- Training: 200K steps (~24h)&lt;br&gt;- Index rebuild: weekly (incremental daily)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="120" width="290" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-ranking" value="&lt;b&gt;Ranking Model Training&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Data: impression logs with labels&lt;br&gt;  - Click (binary), ATC (binary), Purchase&lt;br&gt;- Negative sampling: impressed not clicked&lt;br&gt;- Optimizer: AdamW (lr=1e-3, wd=0.01)&lt;br&gt;- Batch: 8192, mixed precision (BF16)&lt;br&gt;- Multi-task loss: uncertainty weighting&lt;br&gt;- Retrained daily, pushed hourly (online)&lt;br&gt;- Position bias correction (IPW)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="285" width="290" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Serving -->
+        <mxCell id="serving-title" value="&lt;b&gt;SERVING PIPELINE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="490" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="serving" value="&lt;b&gt;End-to-End Serving Flow&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. Query preprocessing &amp; understanding (5ms)&lt;br&gt;2. Parallel retrieval:&lt;br&gt;   - BM25 (Vespa) → 500 candidates&lt;br&gt;   - ANN (Vespa HNSW) → 500 candidates&lt;br&gt;   - Behavioral (Redis) → 200 candidates&lt;br&gt;3. Merge &amp; dedup → 1000 unique items (10ms)&lt;br&gt;4. Feature fetch (Redis + Bigtable) (15ms)&lt;br&gt;5. Ranking model (Triton GPU) (20ms)&lt;br&gt;6. Re-ranking + business rules (5ms)&lt;br&gt;7. Return top-48 results&lt;br&gt;&lt;br&gt;Total P50: ~80ms, P99: ~150ms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="530" width="290" height="240" as="geometry" />
+        </mxCell>
+
+        <mxCell id="omnichannel" value="&lt;b&gt;Omnichannel Considerations&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Store-specific inventory filtering&lt;br&gt;- Pickup availability boost&lt;br&gt;- Delivery time estimation&lt;br&gt;- In-store navigation (aisle/shelf)&lt;br&gt;- Price match (online vs in-store)&lt;br&gt;- Substitution recommendations (OOS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="750" y="530" width="220" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Metrics -->
+        <mxCell id="metrics-title" value="&lt;b&gt;METRICS &amp; TRADEOFFS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="800" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="metrics" value="&lt;b&gt;Evaluation Metrics&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Recall@K (retrieval completeness)&lt;br&gt;- NDCG@10 (ranking quality)&lt;br&gt;- CTR, ATC rate, Conversion rate&lt;br&gt;- Revenue per search (RPS)&lt;br&gt;- GMV (Gross Merchandise Value)&lt;br&gt;- Null result rate (no results)&lt;br&gt;- Query reformulation rate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="840" width="250" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tradeoffs" value="&lt;b&gt;Key Tradeoffs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Relevance vs Revenue (sponsored mix)&lt;br&gt;- Personalization vs Privacy&lt;br&gt;- Freshness vs Pre-computation&lt;br&gt;- Recall (broad) vs Precision (focused)&lt;br&gt;- Model complexity vs Latency budget&lt;br&gt;- Organic quality vs Ads revenue&lt;br&gt;- First-party vs Marketplace fairness" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="710" y="840" width="260" height="155" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="product-features" target="retrieval" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="user-features" target="retrieval" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="retrieval" target="ranking" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="ranking" target="reranking" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="reranking" target="serving" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

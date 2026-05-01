@@ -1,0 +1,129 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="Transaction Monitoring Fraud Detection" id="fraud-detection">
+    <mxGraphModel dx="2074" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Transaction Monitoring (Fraud Detection &amp; Blocking)&lt;/b&gt;&lt;br&gt;L7 FAANG System Design" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="20" width="600" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scale -->
+        <mxCell id="scale-box" value="&lt;b&gt;Scale &amp; Requirements&lt;/b&gt;&lt;br&gt;- 100B+ transactions/year (Visa/Stripe scale)&lt;br&gt;- Real-time: decision in &lt;50ms&lt;br&gt;- Fraud rate: ~0.1% (extreme class imbalance)&lt;br&gt;- False positive rate: &lt;0.5% (customer friction)&lt;br&gt;- $30B+ annual fraud losses (global)&lt;br&gt;- Adversarial: fraudsters adapt continuously&lt;br&gt;- Multi-channel: card, ACH, P2P, wire&lt;br&gt;- Regulatory: PSD2/SCA, AML compliance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="360" height="185" as="geometry" />
+        </mxCell>
+
+        <!-- Tech Stack -->
+        <mxCell id="tech-stack" value="&lt;b&gt;Tech Stack&lt;/b&gt;&lt;br&gt;- Streaming: Kafka + Flink (real-time)&lt;br&gt;- Training: XGBoost + PyTorch (GNN)&lt;br&gt;- Serving: custom C++ (ultra-low latency)&lt;br&gt;- Feature Store: Redis (real-time) + Hive&lt;br&gt;- Graph DB: TigerGraph / Neptune&lt;br&gt;- Rules Engine: Drools / custom DSL&lt;br&gt;- Case Management: internal BPMN tool&lt;br&gt;- Monitoring: real-time dashboards (Grafana)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="285" width="360" height="175" as="geometry" />
+        </mxCell>
+
+        <!-- Data -->
+        <mxCell id="data-title" value="&lt;b&gt;DATA &amp; FEATURE ENGINEERING&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="320" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="transaction-features" value="&lt;b&gt;Transaction Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Amount, currency, merchant category&lt;br&gt;- Channel (online, POS, ATM, mobile)&lt;br&gt;- Card-present vs card-not-present&lt;br&gt;- Cross-border indicator&lt;br&gt;- Time of day, day of week&lt;br&gt;- MCC code (merchant category)&lt;br&gt;- Authentication method (3DS, PIN)&lt;br&gt;- IP address, device fingerprint" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="240" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="behavioral-features" value="&lt;b&gt;Behavioral / Velocity Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Txn count (1h, 6h, 24h, 7d windows)&lt;br&gt;- Amount sum/avg/max per window&lt;br&gt;- Unique merchants in last N hours&lt;br&gt;- Geographic velocity (impossible travel)&lt;br&gt;- Device switching frequency&lt;br&gt;- Time since last transaction&lt;br&gt;- Deviation from user's normal pattern&lt;br&gt;- Failed attempt count (recent)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="710" y="120" width="250" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="graph-features" value="&lt;b&gt;Graph / Network Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Shared device across accounts&lt;br&gt;- Shared address/phone/email&lt;br&gt;- Money flow networks (mule chains)&lt;br&gt;- Merchant risk communities&lt;br&gt;- Account age vs network connections&lt;br&gt;- PageRank on transaction graph&lt;br&gt;- Community detection (fraud rings)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="310" width="250" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-data" value="&lt;b&gt;Training Data Challenges&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Extreme imbalance: 1000:1 (legit:fraud)&lt;br&gt;- Label delay: chargebacks 30-90 days&lt;br&gt;- Selection bias: only see approved txns&lt;br&gt;- Concept drift: fraud patterns evolve&lt;br&gt;- Labeling: confirmed fraud + chargebacks&lt;br&gt;- Synthetic oversampling (SMOTE variants)&lt;br&gt;- Stratified temporal splits" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="310" width="240" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Model -->
+        <mxCell id="model-title" value="&lt;b&gt;MODEL ARCHITECTURE (Ensemble)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="80" width="380" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rules-engine" value="&lt;b&gt;Layer 1: Rules Engine (Deterministic)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Hard blocks: sanctioned countries, blacklists&lt;br&gt;- Velocity rules: &gt;5 txns in 10 min&lt;br&gt;- Amount thresholds: &gt;$10K → review&lt;br&gt;- Known fraud patterns (regex on merchants)&lt;br&gt;- Latency: &lt;1ms (in-memory)&lt;br&gt;- ~20% of fraud caught here (high precision)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="120" width="310" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ml-model" value="&lt;b&gt;Layer 2: ML Scoring (XGBoost + DNN)&lt;/b&gt;&lt;br&gt;&lt;br&gt;XGBoost (primary):&lt;br&gt;- 1000 trees, max_depth=8, η=0.05&lt;br&gt;- 500+ engineered features&lt;br&gt;- Scale_pos_weight for imbalance&lt;br&gt;- Focal loss variant for hard examples&lt;br&gt;&lt;br&gt;Deep Network (complementary):&lt;br&gt;- LSTM on transaction sequences (last 50)&lt;br&gt;- Attention over temporal patterns&lt;br&gt;- Entity embeddings (merchant, user)&lt;br&gt;- Output: P(fraud) ∈ [0, 1]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="260" width="310" height="210" as="geometry" />
+        </mxCell>
+
+        <mxCell id="gnn-model" value="&lt;b&gt;Layer 3: Graph Neural Network (Ring Detection)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Architecture: GraphSAGE on transaction graph&lt;br&gt;- Nodes: users, merchants, devices, IPs&lt;br&gt;- Edges: transactions, shared attributes&lt;br&gt;- Detects coordinated fraud (rings)&lt;br&gt;- 3-hop neighborhood aggregation&lt;br&gt;- Semi-supervised: few labeled fraudsters&lt;br&gt;- Batch inference (near real-time, 5min)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="480" width="310" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ensemble" value="&lt;b&gt;Ensemble &amp; Decision&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Stacking: logistic regression on model scores&lt;br&gt;- Thresholds (per channel):&lt;br&gt;  - &gt;0.9 → Auto-block&lt;br&gt;  - 0.7-0.9 → Step-up auth (OTP)&lt;br&gt;  - 0.3-0.7 → Flag for review&lt;br&gt;  - &lt;0.3 → Approve&lt;br&gt;- Dynamic threshold based on $ loss tolerance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="640" width="310" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Training -->
+        <mxCell id="training-title" value="&lt;b&gt;TRAINING DETAILS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="80" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-config" value="&lt;b&gt;Training Configuration&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Data: 6 months transactions (~50B records)&lt;br&gt;- Label: fraud confirmed (chargeback/report)&lt;br&gt;- Resampling: SMOTE + undersampling (10:1)&lt;br&gt;- XGBoost: 5-fold temporal CV&lt;br&gt;- DNN: Adam (lr=1e-4), batch=4096&lt;br&gt;- Sequence model: teacher forcing&lt;br&gt;- Retrained: weekly (full) + daily (incremental)&lt;br&gt;- Champion/challenger deployment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="120" width="290" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="adversarial" value="&lt;b&gt;Adversarial Robustness&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Fraud patterns evolve (cat-and-mouse)&lt;br&gt;- Feature drift monitoring (PSI, KS-test)&lt;br&gt;- Adversarial training (GAN-based)&lt;br&gt;- Regular model refresh (weekly)&lt;br&gt;- Red team: internal fraud simulation&lt;br&gt;- Feedback latency: 30-90 day lag&lt;br&gt;- Semi-supervised for unknown fraud" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="305" width="290" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Serving -->
+        <mxCell id="serving-title" value="&lt;b&gt;REAL-TIME SERVING&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="490" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="serving" value="&lt;b&gt;Real-Time Decision Flow&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. Transaction arrives (Kafka) (1ms)&lt;br&gt;2. Feature computation:&lt;br&gt;   - Static features (Redis lookup) (2ms)&lt;br&gt;   - Velocity features (Flink window) (5ms)&lt;br&gt;   - Graph features (pre-computed) (3ms)&lt;br&gt;3. Rules engine check (1ms)&lt;br&gt;4. ML model scoring (XGB + DNN) (10ms)&lt;br&gt;5. Ensemble decision (1ms)&lt;br&gt;6. Action: approve/block/challenge&lt;br&gt;&lt;br&gt;Total: &lt;30ms P50, &lt;50ms P99" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="530" width="270" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="feedback-loop" value="&lt;b&gt;Feedback &amp; Investigation&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Analyst review queue (priority scored)&lt;br&gt;- SAR filing automation (AML)&lt;br&gt;- Customer dispute resolution&lt;br&gt;- Chargeback signal → training label&lt;br&gt;- Real-time rule updates (hot deploy)&lt;br&gt;- Fraud ring investigation tools" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="740" y="530" width="230" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Metrics -->
+        <mxCell id="metrics-title" value="&lt;b&gt;METRICS &amp; TRADEOFFS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="780" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="metrics" value="&lt;b&gt;Evaluation Metrics&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Precision @ Recall=90% (catch rate)&lt;br&gt;- FPR (false positive rate → customer impact)&lt;br&gt;- $ saved (fraud prevented / total fraud)&lt;br&gt;- Detection rate by fraud type&lt;br&gt;- Time-to-detect (early vs late)&lt;br&gt;- AUPRC (better than AUC for imbalanced)&lt;br&gt;- $ cost per false positive (lost revenue)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="820" width="260" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tradeoffs" value="&lt;b&gt;Key Tradeoffs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Catch rate vs Customer friction (FP)&lt;br&gt;- Real-time speed vs Feature richness&lt;br&gt;- Model complexity vs Explainability (reg)&lt;br&gt;- Global model vs Region-specific&lt;br&gt;- Automation vs Human investigation&lt;br&gt;- Privacy (data sharing) vs Detection power&lt;br&gt;- Conservative (block more) vs Liberal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="730" y="820" width="260" height="155" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="transaction-features" target="rules-engine" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="behavioral-features" target="ml-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="graph-features" target="gnn-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="rules-engine" target="ml-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="ml-model" target="ensemble" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="gnn-model" target="ensemble" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="ensemble" target="serving" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

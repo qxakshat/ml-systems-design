@@ -1,0 +1,125 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="Codex LLM Code Assistant" id="codex-llm-assistant">
+    <mxGraphModel dx="2074" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Codex / LLM-Based Code Assistant (Copilot)&lt;/b&gt;&lt;br&gt;L7 FAANG System Design" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="20" width="600" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scale -->
+        <mxCell id="scale-box" value="&lt;b&gt;Scale &amp; Requirements&lt;/b&gt;&lt;br&gt;- 100M+ developers (GitHub Copilot scale)&lt;br&gt;- 1B+ completions/day&lt;br&gt;- Latency: &lt;500ms for inline suggestions&lt;br&gt;- Context window: 128K tokens&lt;br&gt;- Multi-language: 50+ programming languages&lt;br&gt;- Quality: 40%+ acceptance rate&lt;br&gt;- Safety: no credential/PII leakage&lt;br&gt;- Cost: $0.01-0.05 per completion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="360" height="185" as="geometry" />
+        </mxCell>
+
+        <!-- Tech Stack -->
+        <mxCell id="tech-stack" value="&lt;b&gt;Tech Stack&lt;/b&gt;&lt;br&gt;- Training: Megatron-LM + DeepSpeed (ZeRO-3)&lt;br&gt;- Inference: vLLM / TensorRT-LLM / TGI&lt;br&gt;- Hardware: H100 clusters (training + inference)&lt;br&gt;- Serving: KV-cache optimized, PagedAttention&lt;br&gt;- Gateway: custom load balancer (token-aware)&lt;br&gt;- IDE: LSP protocol integration&lt;br&gt;- Monitoring: token/s, TTFT, acceptance rate&lt;br&gt;- Safety: guardrails, output filtering" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="285" width="360" height="175" as="geometry" />
+        </mxCell>
+
+        <!-- Data -->
+        <mxCell id="data-title" value="&lt;b&gt;DATA &amp; PREPROCESSING&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pretraining-data" value="&lt;b&gt;Pre-Training Data&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Source code: GitHub (permissive licenses)&lt;br&gt;- The Stack v2: 3TB+ of code&lt;br&gt;- Languages: Python, JS, TS, Java, C++, Go...&lt;br&gt;- Natural language: technical docs, SO, papers&lt;br&gt;- Deduplication: MinHash (exact + near)&lt;br&gt;- Quality filtering: stars, forks, lint pass&lt;br&gt;- PII removal: secrets, emails, API keys&lt;br&gt;- License compliance: opt-out respected" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="260" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="finetuning-data" value="&lt;b&gt;Fine-Tuning Data (Alignment)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Instruction data: 100K+ code tasks&lt;br&gt;- Human preferences: chosen vs rejected&lt;br&gt;- Fill-in-the-Middle (FIM) formatting&lt;br&gt;- Multi-turn conversations (chat)&lt;br&gt;- Code review pairs (before/after)&lt;br&gt;- Bug fix pairs (buggy → fixed)&lt;br&gt;- Test generation pairs (code → tests)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="730" y="120" width="230" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="context" value="&lt;b&gt;Context Engineering (Runtime)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Current file (cursor position)&lt;br&gt;- Open tabs (related files)&lt;br&gt;- Import graph (dependencies)&lt;br&gt;- LSP: type info, function signatures&lt;br&gt;- Git diff (recent changes)&lt;br&gt;- Repository structure (file tree)&lt;br&gt;- Retrieval: similar code snippets (RAG)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="310" width="250" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Model Architecture -->
+        <mxCell id="model-title" value="&lt;b&gt;MODEL ARCHITECTURE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="80" width="380" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="base-model" value="&lt;b&gt;Base Model: GPT-4 class Decoder-Only Transformer&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Architecture: decoder-only Transformer&lt;br&gt;- Parameters: ~200B (MoE) or ~70B (dense)&lt;br&gt;- Layers: 80-96, heads: 64-128&lt;br&gt;- Hidden dim: 8192, FFN: 32768&lt;br&gt;- Vocabulary: 100K tokens (BPE, code-aware)&lt;br&gt;- Context: 128K tokens (RoPE extended)&lt;br&gt;- Activation: SwiGLU&lt;br&gt;- Normalization: RMSNorm (pre-norm)&lt;br&gt;- Position: Rotary Position Embeddings (RoPE)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="120" width="340" height="190" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fim-training" value="&lt;b&gt;Fill-in-the-Middle (FIM) Training&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Standard: left-to-right autoregressive&lt;br&gt;- FIM: [prefix] [suffix] → [middle]&lt;br&gt;- 50% of training uses FIM format&lt;br&gt;- Enables inline completion (not just append)&lt;br&gt;- Critical for IDE autocomplete use case&lt;br&gt;- SPM (Suffix-Prefix-Middle) variant" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="320" width="340" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alignment" value="&lt;b&gt;Alignment: RLHF / DPO&lt;/b&gt;&lt;br&gt;&lt;br&gt;- SFT: supervised fine-tuning on instructions&lt;br&gt;- Reward model: code quality preferences&lt;br&gt;  - Correctness (passes tests)&lt;br&gt;  - Readability (style, naming)&lt;br&gt;  - Efficiency (time/space complexity)&lt;br&gt;  - Safety (no vulnerabilities)&lt;br&gt;- DPO (Direct Preference Optimization)&lt;br&gt;- KL constraint vs reference policy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="460" width="340" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="speculative" value="&lt;b&gt;Speculative Decoding (Speed)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Draft model: 1.5B params (fast, ~10ms/token)&lt;br&gt;- Verifier: full model (accurate)&lt;br&gt;- Draft generates K tokens speculatively&lt;br&gt;- Verifier accepts/rejects in one pass&lt;br&gt;- 2-3x speedup with same quality&lt;br&gt;- Medusa: multi-head parallel decoding" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="630" width="340" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Training -->
+        <mxCell id="training-title" value="&lt;b&gt;TRAINING DETAILS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="80" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-pretrain" value="&lt;b&gt;Pre-Training&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Tokens: 2-15T tokens&lt;br&gt;- Hardware: 2048-8192 H100 GPUs&lt;br&gt;- Parallelism: TP=8, PP=16, DP=128&lt;br&gt;- Optimizer: AdamW (lr=3e-4, cosine decay)&lt;br&gt;- Batch size: 4M tokens (ramp up)&lt;br&gt;- Training time: 2-4 months&lt;br&gt;- BF16 mixed precision&lt;br&gt;- Gradient checkpointing (memory)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="120" width="280" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-finetune" value="&lt;b&gt;Fine-Tuning &amp; Alignment&lt;/b&gt;&lt;br&gt;&lt;br&gt;- SFT: 3 epochs on instruction data&lt;br&gt;- Learning rate: 2e-5 (10x lower)&lt;br&gt;- DPO: β=0.1, lr=5e-7&lt;br&gt;- LoRA for efficient adaptation (rank=64)&lt;br&gt;- Evaluation: HumanEval (pass@1: 85%+)&lt;br&gt;- MBPP, SWE-bench, LiveCodeBench&lt;br&gt;- Safety eval: CyberSecEval, HarmBench" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="305" width="280" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Serving -->
+        <mxCell id="serving-title" value="&lt;b&gt;INFERENCE &amp; SERVING&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="490" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="serving" value="&lt;b&gt;Inference Optimization&lt;/b&gt;&lt;br&gt;&lt;br&gt;- KV-cache: PagedAttention (vLLM)&lt;br&gt;- Continuous batching (dynamic)&lt;br&gt;- Tensor parallelism across 4-8 GPUs&lt;br&gt;- Quantization: FP8 / INT4 (GPTQ/AWQ)&lt;br&gt;- Speculative decoding (2-3x speedup)&lt;br&gt;- Prefix caching (common prompts)&lt;br&gt;- Flash Attention 2 (memory efficient)&lt;br&gt;&lt;br&gt;Latency targets:&lt;br&gt;- TTFT (time to first token): &lt;200ms&lt;br&gt;- Token generation: 50-100 tokens/s&lt;br&gt;- Completion length: ~50 tokens avg" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="530" width="270" height="230" as="geometry" />
+        </mxCell>
+
+        <mxCell id="safety" value="&lt;b&gt;Safety &amp; Filtering&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Input filter: detect prompt injection&lt;br&gt;- Output filter: credential/PII detection&lt;br&gt;- License compliance (code attribution)&lt;br&gt;- Vulnerability scanning (SAST on output)&lt;br&gt;- Hallucination detection (type checker)&lt;br&gt;- Rate limiting per user/org" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="740" y="530" width="230" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Metrics -->
+        <mxCell id="metrics-title" value="&lt;b&gt;METRICS &amp; TRADEOFFS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="790" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="metrics" value="&lt;b&gt;Evaluation Metrics&lt;/b&gt;&lt;br&gt;&lt;br&gt;- HumanEval pass@1 (functional correctness)&lt;br&gt;- Acceptance rate (user keeps suggestion)&lt;br&gt;- Persistence rate (not deleted after 30s)&lt;br&gt;- % code written by AI (productivity)&lt;br&gt;- TTFT / tokens per second (speed)&lt;br&gt;- Cost per completion (infrastructure)&lt;br&gt;- User retention &amp; NPS score" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="830" width="260" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tradeoffs" value="&lt;b&gt;Key Tradeoffs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Quality (large model) vs Latency (small)&lt;br&gt;- Context length vs Compute cost&lt;br&gt;- Safety filtering vs Utility (over-refusal)&lt;br&gt;- Training data freshness vs Quality&lt;br&gt;- Personalization vs Privacy&lt;br&gt;- Multi-line vs Single-line completion&lt;br&gt;- Cost per token vs Revenue per user" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="730" y="830" width="260" height="155" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="pretraining-data" target="base-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="finetuning-data" target="alignment" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="base-model" target="fim-training" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="fim-training" target="alignment" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="alignment" target="speculative" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="speculative" target="serving" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="context" target="serving" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

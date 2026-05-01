@@ -1,0 +1,115 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="Social Media Friend Recommendations (Graph)" id="social-graph-rec">
+    <mxGraphModel dx="2074" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Social Media Friend Recommendations (Graph-Based)&lt;/b&gt;&lt;br&gt;L7 FAANG System Design" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="20" width="550" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scale -->
+        <mxCell id="scale-box" value="&lt;b&gt;Scale &amp; Requirements&lt;/b&gt;&lt;br&gt;- 3B+ users (Facebook/Meta scale)&lt;br&gt;- Social graph: 400B+ edges&lt;br&gt;- 100M+ recommendations served/day&lt;br&gt;- Latency: &lt;200ms for top-K suggestions&lt;br&gt;- Real-time graph updates (friendships)&lt;br&gt;- Cold-start for new users&lt;br&gt;- Privacy: respect blocked/hidden users&lt;br&gt;- Diversity: avoid filter bubbles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="340" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Tech Stack -->
+        <mxCell id="tech-stack" value="&lt;b&gt;Tech Stack&lt;/b&gt;&lt;br&gt;- Graph DB: TAO (Meta), Neo4j, TigerGraph&lt;br&gt;- Graph Engine: PyG, DGL (Deep Graph Lib)&lt;br&gt;- Training: PyTorch Geometric + NCCL&lt;br&gt;- Serving: gRPC microservices&lt;br&gt;- Cache: Memcached/Redis (hot embeddings)&lt;br&gt;- Stream: Kafka (real-time graph events)&lt;br&gt;- Batch: Spark GraphX / Pregel&lt;br&gt;- Feature Store: Meta's UniStore" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="340" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Data Layer -->
+        <mxCell id="data-title" value="&lt;b&gt;DATA &amp; GRAPH CONSTRUCTION&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="80" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="graph-data" value="&lt;b&gt;Heterogeneous Graph Schema&lt;/b&gt;&lt;br&gt;&lt;br&gt;Node types:&lt;br&gt;- User (profile, demographics)&lt;br&gt;- Post, Photo, Event, Group, Page&lt;br&gt;&lt;br&gt;Edge types:&lt;br&gt;- friendship (bidirectional)&lt;br&gt;- follows, likes, comments, shares&lt;br&gt;- co-attendance (events)&lt;br&gt;- co-membership (groups)&lt;br&gt;- interaction_weight (time-decayed)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="120" width="260" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="features" value="&lt;b&gt;Node &amp; Edge Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;User features:&lt;br&gt;- Demographics (age, location, language)&lt;br&gt;- Activity level, join date&lt;br&gt;- Interest embeddings (from pages/groups)&lt;br&gt;- Historical accept rate&lt;br&gt;&lt;br&gt;Edge features:&lt;br&gt;- Mutual friends count&lt;br&gt;- Interaction frequency &amp; recency&lt;br&gt;- Communication channel (msg, wall, etc)&lt;br&gt;- Jaccard similarity of neighborhoods" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="120" width="250" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="candidate-gen" value="&lt;b&gt;Candidate Generation (Recall)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- FoF (Friends-of-Friends): top source&lt;br&gt;- 2-hop neighbors with mutual count &gt; 3&lt;br&gt;- Contact list matching (phone/email)&lt;br&gt;- Co-location signals (same school/work)&lt;br&gt;- Graph random walks (Node2Vec)&lt;br&gt;- Community detection (Louvain)&lt;br&gt;- Candidates per user: ~1000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="340" width="260" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Model Architecture -->
+        <mxCell id="model-title" value="&lt;b&gt;MODEL ARCHITECTURE (Graph Neural Networks)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="80" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="gnn-model" value="&lt;b&gt;Graph Neural Network: GraphSAGE + GAT&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Layer 1: GraphSAGE (mean aggregation)&lt;br&gt;  - Sample 25 neighbors per node&lt;br&gt;  - Hidden dim: 256&lt;br&gt;- Layer 2: GAT (8-head attention)&lt;br&gt;  - Sample 10 neighbors per node&lt;br&gt;  - Attention-weighted aggregation&lt;br&gt;- Layer 3: GIN (Graph Isomorphism Network)&lt;br&gt;  - MLP aggregation for expressiveness&lt;br&gt;- Output: 128-d node embedding&lt;br&gt;- Mini-batch training with NeighborLoader" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="120" width="330" height="210" as="geometry" />
+        </mxCell>
+
+        <mxCell id="link-pred" value="&lt;b&gt;Link Prediction Head&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Dot product: score = u·v&lt;br&gt;- MLP head: concat(u, v, |u-v|, u*v) → FC&lt;br&gt;- Edge-level features injected&lt;br&gt;- Binary cross-entropy loss&lt;br&gt;- Negative sampling: 5:1 ratio&lt;br&gt;- Hard negatives: 2-hop non-friends" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="340" width="330" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ranking-model" value="&lt;b&gt;Ranking Model (2nd Stage)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Architecture: Deep &amp; Cross Network v2&lt;br&gt;- Features: GNN embed + handcrafted&lt;br&gt;  - Mutual friends, common groups&lt;br&gt;  - Profile similarity (embedding cosine)&lt;br&gt;  - Geographic proximity&lt;br&gt;  - Interaction recency&lt;br&gt;- Multi-task: P(accept) + P(interact)&lt;br&gt;- Output: calibrated probability" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="480" width="330" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Training -->
+        <mxCell id="training-title" value="&lt;b&gt;TRAINING PIPELINE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="80" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-config" value="&lt;b&gt;Training Configuration&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Optimizer: Adam (lr=1e-3)&lt;br&gt;- Mini-batch: 1024 target edges&lt;br&gt;- Neighbor sampling: [25, 10] per layer&lt;br&gt;- Epochs: 100 (early stopping patience=5)&lt;br&gt;- Distributed: PyTorch DDP + RPC&lt;br&gt;- Graph partitioning: METIS&lt;br&gt;- Full graph doesn't fit in memory:&lt;br&gt;  - Partition into 1000 subgraphs&lt;br&gt;  - Cross-partition message passing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="120" width="280" height="190" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-tricks" value="&lt;b&gt;Training Techniques&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Contrastive loss (InfoNCE)&lt;br&gt;- Self-supervised pretraining:&lt;br&gt;  - Graph masking (mask 15% edges)&lt;br&gt;  - Node feature reconstruction&lt;br&gt;- Curriculum learning: easy → hard pairs&lt;br&gt;- Temporal train/val/test split&lt;br&gt;- Label: accepted friendship in 7 days" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="320" width="280" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- Serving -->
+        <mxCell id="serving-title" value="&lt;b&gt;SERVING ARCHITECTURE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="520" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="serving" value="&lt;b&gt;Online Serving Flow&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. Candidate generation: FoF + graph walk (offline)&lt;br&gt;2. Feature assembly: real-time + cached&lt;br&gt;3. GNN inference: pre-computed embeddings&lt;br&gt;4. Ranking: DCN-v2 scoring (online)&lt;br&gt;5. Re-ranking: diversity, freshness boost&lt;br&gt;6. Filtering: blocked, hidden, existing friends&lt;br&gt;7. Top-20 recommendations returned&lt;br&gt;&lt;br&gt;Refresh: hourly batch + real-time events" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="560" width="300" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="realtime" value="&lt;b&gt;Real-Time Signals&lt;/b&gt;&lt;br&gt;&lt;br&gt;- New friendship → update FoF candidates&lt;br&gt;- Profile view → boost recommendation&lt;br&gt;- Dismiss → suppress for 30 days&lt;br&gt;- Event RSVP → co-attendees promoted&lt;br&gt;- Group join → members become candidates&lt;br&gt;- Kafka stream processing (Flink)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="760" y="560" width="230" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Metrics -->
+        <mxCell id="metrics-title" value="&lt;b&gt;METRICS &amp; TRADEOFFS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="770" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="metrics" value="&lt;b&gt;Evaluation Metrics&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Friend Request Send Rate (engagement)&lt;br&gt;- Accept Rate (precision of recs)&lt;br&gt;- Recall@K (K=10, 20, 50)&lt;br&gt;- NDCG@K (ranking quality)&lt;br&gt;- MRR (Mean Reciprocal Rank)&lt;br&gt;- New connections/week (growth metric)&lt;br&gt;- Time-to-first-friend (cold start)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="810" width="260" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tradeoffs" value="&lt;b&gt;Key Tradeoffs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Precision vs Diversity (filter bubble)&lt;br&gt;- Real-time freshness vs Compute cost&lt;br&gt;- Strong ties vs Weak ties (Granovetter)&lt;br&gt;- Popularity bias vs Fairness&lt;br&gt;- Privacy (contact upload) vs Quality&lt;br&gt;- Graph depth (hops) vs Relevance&lt;br&gt;- Batch efficiency vs Staleness" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="810" width="250" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="graph-data" target="candidate-gen" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="candidate-gen" target="gnn-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="gnn-model" target="link-pred" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="link-pred" target="ranking-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="ranking-model" target="serving" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

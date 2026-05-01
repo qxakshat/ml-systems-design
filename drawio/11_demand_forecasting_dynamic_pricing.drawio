@@ -1,0 +1,115 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="Demand Forecasting and Dynamic Pricing (Uber)" id="demand-forecasting-pricing">
+    <mxGraphModel dx="2074" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Demand Forecasting &amp; Dynamic Pricing (Uber Airport Rides)&lt;/b&gt;&lt;br&gt;L7 FAANG System Design" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="950" y="20" width="650" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scale -->
+        <mxCell id="scale-box" value="&lt;b&gt;Scale &amp; Requirements&lt;/b&gt;&lt;br&gt;- 28M rides/day globally (Uber scale)&lt;br&gt;- 10K+ airport zones worldwide&lt;br&gt;- Forecasting: 5-min intervals, 2h horizon&lt;br&gt;- Pricing update: every 2 minutes per zone&lt;br&gt;- Latency: price quote in &lt;200ms&lt;br&gt;- Supply-demand matching (market equilibrium)&lt;br&gt;- Surge pricing: 1.0x - 5.0x multiplier&lt;br&gt;- Fairness: avoid discriminatory pricing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="360" height="185" as="geometry" />
+        </mxCell>
+
+        <!-- Tech Stack -->
+        <mxCell id="tech-stack" value="&lt;b&gt;Tech Stack&lt;/b&gt;&lt;br&gt;- Training: PyTorch + Ray (distributed)&lt;br&gt;- Time Series: Prophet, DeepAR, TFT&lt;br&gt;- Streaming: Kafka + Apache Flink&lt;br&gt;- Serving: Go microservices + gRPC&lt;br&gt;- Geospatial: H3 hexagonal grid (Uber)&lt;br&gt;- Feature Store: Michelangelo (Uber ML)&lt;br&gt;- Experimentation: XP platform&lt;br&gt;- Storage: Apache Hudi + HDFS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="285" width="360" height="175" as="geometry" />
+        </mxCell>
+
+        <!-- Data -->
+        <mxCell id="data-title" value="&lt;b&gt;DATA &amp; FEATURES&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="demand-features" value="&lt;b&gt;Demand Features (Rider Side)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Historical demand (same time, day, week)&lt;br&gt;- Flight arrival data (real-time API)&lt;br&gt;- Passenger count per terminal&lt;br&gt;- Event calendar (concerts, games)&lt;br&gt;- Weather (rain → +30% demand)&lt;br&gt;- Holiday/season indicators&lt;br&gt;- Current open requests in zone&lt;br&gt;- App opens (intent signal)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="240" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="supply-features" value="&lt;b&gt;Supply Features (Driver Side)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Active drivers in H3 hex (real-time)&lt;br&gt;- En-route drivers (ETA to zone)&lt;br&gt;- Driver acceptance rate (recent)&lt;br&gt;- Shift patterns (historical)&lt;br&gt;- Driver earnings target (elasticity)&lt;br&gt;- Nearby zone supply spillover&lt;br&gt;- Queue position (airport staging)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="710" y="120" width="240" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="external-features" value="&lt;b&gt;External &amp; Contextual Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Weather forecast (hourly, OpenWeather)&lt;br&gt;- Flight schedule + delays (FlightAware)&lt;br&gt;- Public transit disruptions&lt;br&gt;- Competitor pricing (Lyft, taxi)&lt;br&gt;- Traffic conditions (Google Maps API)&lt;br&gt;- Special events (sports, concerts)&lt;br&gt;- Time features (sin/cos encoding)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="310" width="250" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Model Architecture -->
+        <mxCell id="model-title" value="&lt;b&gt;MODEL ARCHITECTURE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="80" width="380" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="demand-model" value="&lt;b&gt;Demand Forecasting: Temporal Fusion Transformer&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Architecture: TFT (Google, 2019)&lt;br&gt;- Multi-horizon: predict next 24 intervals (2h)&lt;br&gt;- Input: 168 historical points (7 days × 24h)&lt;br&gt;- Components:&lt;br&gt;  - Variable selection network (attention)&lt;br&gt;  - LSTM encoder-decoder&lt;br&gt;  - Multi-head temporal attention&lt;br&gt;  - Quantile regression outputs (P10, P50, P90)&lt;br&gt;- Per-zone model (shared backbone + zone embed)&lt;br&gt;- Spatial: H3 hex embeddings (neighbor aware)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="120" width="340" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="supply-model" value="&lt;b&gt;Supply Forecasting: DeepAR + Spatial&lt;/b&gt;&lt;br&gt;&lt;br&gt;- DeepAR: autoregressive RNN&lt;br&gt;- Probabilistic: outputs distribution params&lt;br&gt;- Negative binomial (count data)&lt;br&gt;- Spatial propagation: drivers move zones&lt;br&gt;- Input: driver GPS streams + shift patterns&lt;br&gt;- Cross-zone flow estimation (transition matrix)&lt;br&gt;- ETA model: when drivers become available" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="330" width="340" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pricing-model" value="&lt;b&gt;Dynamic Pricing (Surge) Model&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Objective: maximize completed rides&lt;br&gt;  (market clearing / equilibrium pricing)&lt;br&gt;&lt;br&gt;- Surge multiplier = f(demand, supply, elasticity)&lt;br&gt;- Price elasticity estimation:&lt;br&gt;  - Rider: -0.5 (inelastic for airports)&lt;br&gt;  - Driver: +0.3 (more supply at higher price)&lt;br&gt;&lt;br&gt;- Constrained optimization:&lt;br&gt;  - Maximize: E[completed_trips]&lt;br&gt;  - Subject to: rider satisfaction ≥ threshold&lt;br&gt;  - Subject to: surge ≤ 5.0x cap&lt;br&gt;&lt;br&gt;- Bandit for elasticity learning (contextual)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="490" width="340" height="230" as="geometry" />
+        </mxCell>
+
+        <!-- Training -->
+        <mxCell id="training-title" value="&lt;b&gt;TRAINING DETAILS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="80" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-demand" value="&lt;b&gt;Demand Model Training&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Data: 2 years of ride data per zone&lt;br&gt;- Granularity: 5-minute intervals&lt;br&gt;- Train/val split: temporal (last 30d = val)&lt;br&gt;- Optimizer: Adam (lr=1e-3)&lt;br&gt;- Loss: quantile loss (ρ=0.1, 0.5, 0.9)&lt;br&gt;- Batch: 256 time series chunks&lt;br&gt;- Retrained: daily (rolling window)&lt;br&gt;- Fine-tuned: per-airport specialization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="120" width="280" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-pricing" value="&lt;b&gt;Pricing Model Training&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Causal inference: price → demand effect&lt;br&gt;- Instrumented variable regression&lt;br&gt;- Randomized experiments (price tests)&lt;br&gt;- Counterfactual estimation (DoWhy)&lt;br&gt;- Reinforcement learning variant:&lt;br&gt;  - State: (demand, supply, time, weather)&lt;br&gt;  - Action: surge multiplier (continuous)&lt;br&gt;  - Reward: completed trips&lt;br&gt;- Offline RL (Conservative Q-Learning)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="305" width="280" height="190" as="geometry" />
+        </mxCell>
+
+        <!-- Serving -->
+        <mxCell id="serving-title" value="&lt;b&gt;REAL-TIME SERVING&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="490" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="serving" value="&lt;b&gt;Pricing Pipeline Flow&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. Every 2 min: demand forecast updated&lt;br&gt;2. Supply snapshot from driver GPS&lt;br&gt;3. Compute supply-demand ratio per H3 hex&lt;br&gt;4. Apply pricing model → surge multiplier&lt;br&gt;5. Smooth transitions (max Δ=0.25x/update)&lt;br&gt;6. Store in Redis (zone → surge)&lt;br&gt;7. Rider request → lookup zone → apply surge&lt;br&gt;&lt;br&gt;Price quote latency: &lt;50ms (Redis lookup)&lt;br&gt;Forecast refresh: every 2 minutes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="530" width="280" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="geospatial" value="&lt;b&gt;Geospatial (H3 Grid)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Uber H3: hexagonal hierarchical grid&lt;br&gt;- Resolution 7: ~5km² per hex (airport)&lt;br&gt;- Spatial smoothing across neighbors&lt;br&gt;- Airport-specific zones:&lt;br&gt;  - Pickup area, terminal curb&lt;br&gt;  - Staging lot, dropoff zones&lt;br&gt;- Heat map visualization for ops" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="750" y="530" width="220" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Metrics -->
+        <mxCell id="metrics-title" value="&lt;b&gt;METRICS &amp; TRADEOFFS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="760" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="metrics" value="&lt;b&gt;Evaluation Metrics&lt;/b&gt;&lt;br&gt;&lt;br&gt;- MAPE (forecast accuracy): target &lt;15%&lt;br&gt;- WAPE (weighted absolute % error)&lt;br&gt;- Quantile coverage (P10, P90 calibration)&lt;br&gt;- Trip completion rate (primary business)&lt;br&gt;- ETA accuracy (promise vs actual)&lt;br&gt;- Driver utilization rate&lt;br&gt;- Rider wait time (minutes)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="800" width="260" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tradeoffs" value="&lt;b&gt;Key Tradeoffs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Revenue vs Rider satisfaction (surge cap)&lt;br&gt;- Price stability vs Market responsiveness&lt;br&gt;- Driver earnings vs Rider affordability&lt;br&gt;- Forecast horizon vs Accuracy&lt;br&gt;- Granularity (5min) vs Data sparsity&lt;br&gt;- Global model vs Per-airport specialization&lt;br&gt;- Surge transparency vs Gaming prevention" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="730" y="800" width="260" height="155" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="demand-features" target="demand-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="supply-features" target="supply-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="demand-model" target="pricing-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="supply-model" target="pricing-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="pricing-model" target="serving" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

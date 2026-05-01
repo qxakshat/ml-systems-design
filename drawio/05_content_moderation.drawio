@@ -1,0 +1,126 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="Content Moderation System" id="content-moderation">
+    <mxGraphModel dx="2074" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Content Moderation System (Harmful Content Detection)&lt;/b&gt;&lt;br&gt;L7 FAANG System Design" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="20" width="600" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scale -->
+        <mxCell id="scale-box" value="&lt;b&gt;Scale &amp; Requirements&lt;/b&gt;&lt;br&gt;- 500M+ posts/day (text, image, video)&lt;br&gt;- 95%+ proactive detection (before reports)&lt;br&gt;- Latency: &lt;500ms for pre-publish check&lt;br&gt;- False positive rate: &lt;1% (free speech)&lt;br&gt;- Categories: hate, violence, nudity, spam,&lt;br&gt;  misinformation, self-harm, CSAM, terrorism&lt;br&gt;- Multi-lingual: 100+ languages&lt;br&gt;- Context-aware (satire, news, education)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="360" height="185" as="geometry" />
+        </mxCell>
+
+        <!-- Tech Stack -->
+        <mxCell id="tech-stack" value="&lt;b&gt;Tech Stack&lt;/b&gt;&lt;br&gt;- Training: PyTorch + Fairseq (Meta)&lt;br&gt;- Serving: NVIDIA Triton + TorchServe&lt;br&gt;- Queue: Kafka (async processing)&lt;br&gt;- Hash DB: PDQ/PhotoDNA (known bad)&lt;br&gt;- Vector DB: FAISS (near-duplicate)&lt;br&gt;- Human review: internal tooling (BPMN)&lt;br&gt;- Feature Store: Hive + Redis&lt;br&gt;- Orchestration: Airflow + K8s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="285" width="360" height="175" as="geometry" />
+        </mxCell>
+
+        <!-- Data Pipeline -->
+        <mxCell id="data-title" value="&lt;b&gt;DATA PIPELINE &amp; FEATURE EXTRACTION&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="text-features" value="&lt;b&gt;Text Feature Extraction&lt;/b&gt;&lt;br&gt;&lt;br&gt;- XLM-RoBERTa tokenization (100+ langs)&lt;br&gt;- Keyword/regex pre-filter (fast path)&lt;br&gt;- Hate speech lexicon matching&lt;br&gt;- Obfuscation detection (l33tspeak)&lt;br&gt;- Context window: post + thread + profile&lt;br&gt;- Entity recognition (targets of hate)&lt;br&gt;- Sentiment &amp; toxicity scoring" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="250" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="image-features" value="&lt;b&gt;Image/Video Feature Extraction&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Perceptual hashing (PDQ, PhotoDNA)&lt;br&gt;- CLIP visual embeddings&lt;br&gt;- NSFW classifier (nudity detection)&lt;br&gt;- Violence/gore detector&lt;br&gt;- OCR for text-in-image (memes)&lt;br&gt;- Object detection (weapons, drugs)&lt;br&gt;- Video: keyframe extraction (1fps)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="120" width="250" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="context-features" value="&lt;b&gt;Contextual Signals&lt;/b&gt;&lt;br&gt;&lt;br&gt;- User history (prior violations)&lt;br&gt;- Account age &amp; trust score&lt;br&gt;- Virality velocity (rapid sharing)&lt;br&gt;- Network analysis (coordinated behavior)&lt;br&gt;- Report signals from community&lt;br&gt;- Content sharing patterns&lt;br&gt;- Behavioral anomalies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="300" width="250" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-data" value="&lt;b&gt;Training Data&lt;/b&gt;&lt;br&gt;&lt;br&gt;- 50M+ labeled examples (human review)&lt;br&gt;- Multi-annotator (5 per sample, majority)&lt;br&gt;- Active learning: model-uncertain cases&lt;br&gt;- Adversarial examples (evolving tactics)&lt;br&gt;- Synthetic augmentation (paraphrasing)&lt;br&gt;- Cross-lingual transfer labels&lt;br&gt;- Weekly refresh (new attack patterns)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="300" width="250" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Model Architecture -->
+        <mxCell id="model-title" value="&lt;b&gt;MODEL ARCHITECTURE (Multi-Modal Multi-Task)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="80" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="text-model" value="&lt;b&gt;Text Model: XLM-RoBERTa-XL&lt;/b&gt;&lt;br&gt;&lt;br&gt;- 3.5B params, 100+ languages&lt;br&gt;- Fine-tuned on moderation data&lt;br&gt;- Multi-task heads (8 violation types)&lt;br&gt;- Hierarchical: binary (safe/unsafe)&lt;br&gt;  → category → sub-category → severity&lt;br&gt;- Adapter layers per policy region&lt;br&gt;- Few-shot adaptation for new policies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="120" width="310" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vision-model" value="&lt;b&gt;Vision Model: ViT-G + CLIP&lt;/b&gt;&lt;br&gt;&lt;br&gt;- ViT-G/14 backbone (1.8B params)&lt;br&gt;- Multi-label: nudity, violence, gore,&lt;br&gt;  hate symbols, self-harm imagery&lt;br&gt;- Near-duplicate detection (PDQ hash)&lt;br&gt;- Known-bad database matching&lt;br&gt;- CLIP zero-shot for emerging categories&lt;br&gt;- Severity scoring (0-1 continuous)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="290" width="310" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="multimodal-fusion" value="&lt;b&gt;Multi-Modal Fusion (Memes/Videos)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Late fusion: concat(text_logits, img_logits)&lt;br&gt;- Cross-modal attention (text↔image)&lt;br&gt;- Hateful meme detection:&lt;br&gt;  - Image benign + text benign = harmful&lt;br&gt;  - Requires joint understanding&lt;br&gt;- Architecture: VisualBERT / FLAVA&lt;br&gt;- Video: temporal aggregation (NetVLAD)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="455" width="310" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ensemble" value="&lt;b&gt;Ensemble &amp; Decision Layer&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Cascaded architecture:&lt;br&gt;  1. Fast filter (regex + hash) → 60% clear&lt;br&gt;  2. Lightweight model (distilled) → 30%&lt;br&gt;  3. Full model (heavy) → 9%&lt;br&gt;  4. Human review → 1% (edge cases)&lt;br&gt;- Threshold tuning per category&lt;br&gt;- Region-specific policy adaptation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="615" width="310" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Training -->
+        <mxCell id="training-title" value="&lt;b&gt;TRAINING DETAILS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="80" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-config" value="&lt;b&gt;Training Configuration&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Optimizer: AdamW (lr=2e-5, wd=0.01)&lt;br&gt;- Batch: 2048 (128 GPUs × 16)&lt;br&gt;- Scheduler: linear warmup + decay&lt;br&gt;- Mixed precision (BF16)&lt;br&gt;- Multi-task loss weighting (uncertainty)&lt;br&gt;- Class weights: inverse frequency&lt;br&gt;- Focal loss for rare categories (γ=2)&lt;br&gt;- Curriculum: easy → hard examples" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="120" width="280" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="continual-learning" value="&lt;b&gt;Continual Learning&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Weekly model refresh (new violations)&lt;br&gt;- Elastic Weight Consolidation (EWC)&lt;br&gt;- Replay buffer (10% historical data)&lt;br&gt;- Adversarial training (GAN-generated)&lt;br&gt;- Human-in-the-loop feedback&lt;br&gt;- A/B testing before full deployment&lt;br&gt;- Canary rollout (1% → 10% → 100%)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="310" width="280" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Serving -->
+        <mxCell id="serving-title" value="&lt;b&gt;SERVING &amp; ENFORCEMENT&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="480" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="serving-flow" value="&lt;b&gt;Enforcement Actions&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Score &gt; 0.95 → Auto-remove (high conf)&lt;br&gt;- Score 0.7-0.95 → Reduce distribution&lt;br&gt;- Score 0.4-0.7 → Human review queue&lt;br&gt;- Score &lt; 0.4 → Pass (with logging)&lt;br&gt;&lt;br&gt;Actions: remove, warn, restrict reach,&lt;br&gt;age-gate, add context label, account strike" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="520" width="280" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="appeals" value="&lt;b&gt;Appeals &amp; Human Review&lt;/b&gt;&lt;br&gt;&lt;br&gt;- User appeals → priority review queue&lt;br&gt;- Expert reviewers (trained per policy)&lt;br&gt;- Reviewer agreement threshold: 2/3&lt;br&gt;- Feedback loop → model retraining&lt;br&gt;- Overturn rate tracking per category&lt;br&gt;- Reviewer calibration &amp; quality checks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="750" y="520" width="230" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Metrics -->
+        <mxCell id="metrics-title" value="&lt;b&gt;METRICS &amp; TRADEOFFS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="710" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="metrics" value="&lt;b&gt;Evaluation Metrics&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Precision &amp; Recall per category&lt;br&gt;- Proactive detection rate (%caught pre-report)&lt;br&gt;- Prevalence (violating views / total views)&lt;br&gt;- Time-to-action (detection → removal)&lt;br&gt;- False positive rate (user impact)&lt;br&gt;- Appeal overturn rate (model error proxy)&lt;br&gt;- Coverage across languages" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="750" width="260" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tradeoffs" value="&lt;b&gt;Key Tradeoffs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Precision vs Recall (over-removal vs harm)&lt;br&gt;- Speed (pre-publish) vs Accuracy (more ctx)&lt;br&gt;- Automation vs Human judgment&lt;br&gt;- Global policy vs Cultural context&lt;br&gt;- Model complexity vs Latency budget&lt;br&gt;- Free speech vs Safety&lt;br&gt;- Transparency vs Gaming prevention" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="730" y="750" width="260" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="text-features" target="text-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="image-features" target="vision-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="text-model" target="multimodal-fusion" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="vision-model" target="multimodal-fusion" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="multimodal-fusion" target="ensemble" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="ensemble" target="serving-flow" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

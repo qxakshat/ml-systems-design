@@ -1,0 +1,124 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="Security Authentication Biometrics" id="security-auth-bio">
+    <mxGraphModel dx="2074" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Security Authentication System (Biometrics)&lt;/b&gt;&lt;br&gt;L7 FAANG System Design" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="20" width="500" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scale Box -->
+        <mxCell id="scale-box" value="&lt;b&gt;Scale &amp; Requirements&lt;/b&gt;&lt;br&gt;- 1B+ authentications/day (Apple FaceID scale)&lt;br&gt;- Latency: &lt;300ms end-to-end&lt;br&gt;- FAR (False Accept Rate): &lt;1/1,000,000&lt;br&gt;- FRR (False Reject Rate): &lt;3%&lt;br&gt;- On-device + server hybrid&lt;br&gt;- Liveness detection required&lt;br&gt;- Multi-modal: Face + Voice + Fingerprint&lt;br&gt;- Privacy: embeddings never leave device" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="350" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Tech Stack -->
+        <mxCell id="tech-stack" value="&lt;b&gt;Tech Stack&lt;/b&gt;&lt;br&gt;- On-device: CoreML / TFLite / NNAPI&lt;br&gt;- Training: PyTorch + DeepFace&lt;br&gt;- Edge: Apple Neural Engine / Qualcomm NPU&lt;br&gt;- Server: NVIDIA Triton (fallback)&lt;br&gt;- Enrollment DB: Secure Enclave / TEE&lt;br&gt;- Vector DB: Milvus / Pinecone (server)&lt;br&gt;- Liveness: IR depth sensor + ML&lt;br&gt;- Crypto: AES-256 for template storage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="350" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Data Pipeline -->
+        <mxCell id="data-title" value="&lt;b&gt;DATA &amp; ENROLLMENT PIPELINE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="80" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="enrollment" value="&lt;b&gt;Enrollment Process&lt;/b&gt;&lt;br&gt;- Capture 5-10 face angles&lt;br&gt;- IR depth map acquisition&lt;br&gt;- Quality assessment (blur, occlusion)&lt;br&gt;- Template extraction (512-d embedding)&lt;br&gt;- Encrypted storage in Secure Enclave&lt;br&gt;- Anti-spoofing validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="250" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="preprocessing" value="&lt;b&gt;Face Preprocessing&lt;/b&gt;&lt;br&gt;- MTCNN / RetinaFace detection&lt;br&gt;- 5-point landmark alignment&lt;br&gt;- Affine transform to canonical pose&lt;br&gt;- Illumination normalization&lt;br&gt;- Resize to 112×112 (ArcFace input)&lt;br&gt;- RGB + IR fusion (depth-aware)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="120" width="230" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-data" value="&lt;b&gt;Training Data&lt;/b&gt;&lt;br&gt;- MS-Celeb-1M (cleaned): 5.8M images&lt;br&gt;- VGGFace2: 3.3M images, 9131 subjects&lt;br&gt;- Synthetic: StyleGAN-generated pairs&lt;br&gt;- Demographic balanced sampling&lt;br&gt;- Hard negative mining across ethnicities&lt;br&gt;- Spoofing data: 500K attack samples" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="270" width="250" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Model Architecture -->
+        <mxCell id="model-title" value="&lt;b&gt;MODEL ARCHITECTURE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="80" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="face-model" value="&lt;b&gt;Face Recognition: ArcFace (IResNet-100)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Backbone: IResNet-100 (improved ResNet)&lt;br&gt;- Embedding: 512-d L2-normalized&lt;br&gt;- Loss: ArcFace (m=0.5, s=64)&lt;br&gt;  - Additive angular margin penalty&lt;br&gt;  - Enhances intra-class compactness&lt;br&gt;- Params: 65.2M&lt;br&gt;- On-device: MobileNetV3 distilled (4.2M)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="120" width="350" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="liveness-model" value="&lt;b&gt;Liveness Detection (Anti-Spoofing)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Multi-stream CNN:&lt;br&gt;  - RGB stream (texture analysis)&lt;br&gt;  - Depth stream (IR structured light)&lt;br&gt;  - Temporal stream (micro-expressions)&lt;br&gt;- Binary classifier: live vs spoof&lt;br&gt;- Attack types: print, replay, 3D mask&lt;br&gt;- Architecture: CDCN (Central Diff Conv)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="290" width="350" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="voice-model" value="&lt;b&gt;Voice Biometrics (Speaker Verification)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Architecture: ECAPA-TDNN&lt;br&gt;- Input: 80-dim Mel spectrogram&lt;br&gt;- Embedding: 192-d speaker vector&lt;br&gt;- Loss: AAM-Softmax&lt;br&gt;- Augmentation: MUSAN noise, RIR&lt;br&gt;- Text-independent verification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="460" width="350" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Training -->
+        <mxCell id="training-title" value="&lt;b&gt;TRAINING DETAILS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="80" width="250" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-config" value="&lt;b&gt;Training Configuration&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Optimizer: SGD (lr=0.1, momentum=0.9)&lt;br&gt;- Scheduler: Step decay at [20, 28, 32]&lt;br&gt;- Batch: 512 (64 GPUs × 8)&lt;br&gt;- Epochs: 36&lt;br&gt;- Partial FC: sample 10% of classes/step&lt;br&gt;- Mixed precision training (AMP)&lt;br&gt;- Distributed: PyTorch DDP&lt;br&gt;- Training time: ~48h on 64×V100" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="120" width="280" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="distillation" value="&lt;b&gt;Knowledge Distillation (Edge Deploy)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Teacher: IResNet-100 (65M params)&lt;br&gt;- Student: MobileFaceNet (1M params)&lt;br&gt;- Distill loss: KL-div + ArcFace&lt;br&gt;- Quantization: INT8 (TFLite)&lt;br&gt;- Pruning: 60% weight reduction&lt;br&gt;- Final model: 4MB on device" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="310" width="280" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Verification Pipeline -->
+        <mxCell id="verify-title" value="&lt;b&gt;VERIFICATION PIPELINE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="430" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="verify-flow" value="&lt;b&gt;1:1 Verification Flow&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. Capture frame → Face detection (2ms)&lt;br&gt;2. Liveness check → Anti-spoof (15ms)&lt;br&gt;3. Alignment → Preprocessing (3ms)&lt;br&gt;4. Feature extraction → 512-d embed (20ms)&lt;br&gt;5. Cosine similarity with stored template&lt;br&gt;6. Threshold: cos_sim &gt; 0.4 → Accept&lt;br&gt;7. Adaptive threshold based on context&lt;br&gt;8. Total on-device: ~50ms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="470" width="280" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fusion" value="&lt;b&gt;Multi-Modal Fusion&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Score-level fusion (weighted sum)&lt;br&gt;- Face: 0.6, Voice: 0.25, Fingerprint: 0.15&lt;br&gt;- Adaptive weights based on quality&lt;br&gt;- Fallback: if face fails → voice challenge&lt;br&gt;- Risk-based: high-value → multi-factor&lt;br&gt;- Behavioral: typing pattern, gait" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="750" y="470" width="220" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Metrics -->
+        <mxCell id="metrics-title" value="&lt;b&gt;METRICS &amp; TRADEOFFS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="670" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="metrics" value="&lt;b&gt;Evaluation Metrics&lt;/b&gt;&lt;br&gt;&lt;br&gt;- TAR @ FAR=1e-6 (True Accept Rate)&lt;br&gt;- EER (Equal Error Rate): target &lt;0.1%&lt;br&gt;- DET curves (Detection Error Tradeoff)&lt;br&gt;- APCER/BPCER (anti-spoofing ISO 30107)&lt;br&gt;- Demographic parity (bias audit)&lt;br&gt;- LFW: 99.83%, CFP-FP: 98.5%&lt;br&gt;- IJB-C TAR@FAR=1e-4: 96.7%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="450" y="710" width="250" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tradeoffs" value="&lt;b&gt;Key Tradeoffs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Security (FAR) vs Convenience (FRR)&lt;br&gt;- On-device privacy vs Server accuracy&lt;br&gt;- Model size vs Recognition quality&lt;br&gt;- Speed vs Multi-modal fusion depth&lt;br&gt;- Demographic fairness vs Overall accuracy&lt;br&gt;- Template update frequency vs Stability&lt;br&gt;- Liveness strictness vs User friction" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="710" width="260" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- Security Considerations -->
+        <mxCell id="security-title" value="&lt;b&gt;SECURITY &amp; PRIVACY&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="650" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="security" value="&lt;b&gt;Security Architecture&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Biometric templates encrypted at rest&lt;br&gt;- Homomorphic encryption for comparison&lt;br&gt;- Cancelable biometrics (revocable templates)&lt;br&gt;- Secure Enclave / ARM TrustZone&lt;br&gt;- No raw biometric data stored&lt;br&gt;- Template diversification (per-app)&lt;br&gt;- Presentation Attack Detection (PAD)&lt;br&gt;- Adversarial robustness training" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="690" width="300" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="enrollment" target="preprocessing" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="preprocessing" target="face-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="face-model" target="verify-flow" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="liveness-model" target="verify-flow" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="verify-flow" target="fusion" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

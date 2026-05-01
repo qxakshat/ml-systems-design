@@ -1,0 +1,115 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="22.0.0">
+  <diagram name="Netflix Home Page Content Feed" id="netflix-feed">
+    <mxGraphModel dx="2074" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Netflix Home Page Content Feed (Recommendation System)&lt;/b&gt;&lt;br&gt;L7 FAANG System Design" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="20" width="620" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scale -->
+        <mxCell id="scale-box" value="&lt;b&gt;Scale &amp; Requirements&lt;/b&gt;&lt;br&gt;- 260M+ subscribers globally&lt;br&gt;- ~15K titles in catalog per region&lt;br&gt;- Homepage: 40+ rows × 75 items each&lt;br&gt;- Latency: &lt;250ms page load&lt;br&gt;- 80% of watch time from recommendations&lt;br&gt;- Multi-device: TV, mobile, web, tablet&lt;br&gt;- Real-time personalization on scroll&lt;br&gt;- A/B test: 200+ concurrent experiments" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="350" height="185" as="geometry" />
+        </mxCell>
+
+        <!-- Tech Stack -->
+        <mxCell id="tech-stack" value="&lt;b&gt;Tech Stack&lt;/b&gt;&lt;br&gt;- Training: Spark + PyTorch (distributed)&lt;br&gt;- Serving: Java microservices + gRPC&lt;br&gt;- Data: Apache Iceberg + S3&lt;br&gt;- Stream: Apache Kafka + Flink&lt;br&gt;- Cache: EVCache (memcached fork)&lt;br&gt;- Feature Store: Metacat + custom&lt;br&gt;- Experiment: Netflix XP platform&lt;br&gt;- Orchestration: Meson (workflow)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="285" width="350" height="175" as="geometry" />
+        </mxCell>
+
+        <!-- Data -->
+        <mxCell id="data-title" value="&lt;b&gt;DATA &amp; FEATURES&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#dae8fc;strokeColor=#6c8ebf;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="80" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="user-features" value="&lt;b&gt;User Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Watch history (last 1000 interactions)&lt;br&gt;- Taste clusters (genre preferences)&lt;br&gt;- Time-of-day patterns&lt;br&gt;- Device type &amp; context&lt;br&gt;- Completion rates per genre&lt;br&gt;- Scroll depth &amp; hover behavior&lt;br&gt;- Profile maturity &amp; demographics&lt;br&gt;- Implicit: pause, rewind, skip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="120" width="240" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="item-features" value="&lt;b&gt;Item (Title) Features&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Genre tags (multi-label, 1000+ tags)&lt;br&gt;- Cast, director, creator metadata&lt;br&gt;- Content maturity rating&lt;br&gt;- Production country, language&lt;br&gt;- Visual features (trailer frames)&lt;br&gt;- Popularity curve (trending)&lt;br&gt;- Freshness (release date, new to Netflix)&lt;br&gt;- Content embeddings (plot + visual)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="700" y="120" width="250" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="interaction-data" value="&lt;b&gt;Interaction Data&lt;/b&gt;&lt;br&gt;&lt;br&gt;- 100B+ events/day (plays, browses)&lt;br&gt;- Implicit feedback matrix (sparse)&lt;br&gt;- Session-level sequences&lt;br&gt;- Cross-profile signals (household)&lt;br&gt;- Temporal patterns (weekday vs weekend)&lt;br&gt;- Contextual bandits exploration data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="310" width="250" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Model Architecture -->
+        <mxCell id="model-title" value="&lt;b&gt;MODEL ARCHITECTURE (Multi-Stage)&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#d5e8d4;strokeColor=#82b366;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="80" width="380" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="candidate-gen" value="&lt;b&gt;Stage 1: Candidate Generation&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Collaborative Filtering (Matrix Factorization)&lt;br&gt;  - ALS on implicit feedback matrix&lt;br&gt;  - User &amp; item embeddings: 128-d&lt;br&gt;- Content-Based: item similarity&lt;br&gt;  - BERT embeddings of descriptions&lt;br&gt;- Sequential: Transformer on watch history&lt;br&gt;  - SASRec (Self-Attentive Sequential)&lt;br&gt;- Trending/Popular (cold start fallback)&lt;br&gt;- Output: ~2000 candidates per user" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="120" width="320" height="190" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ranking-model" value="&lt;b&gt;Stage 2: Ranking (Personalized)&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Architecture: Wide &amp; Deep / DCN-v2&lt;br&gt;- Features (500+):&lt;br&gt;  - User embedding × Item embedding (dot)&lt;br&gt;  - Genre affinity scores&lt;br&gt;  - Recency &amp; trending signals&lt;br&gt;  - Contextual (time, device, day)&lt;br&gt;- Multi-objective:&lt;br&gt;  - P(play) — primary&lt;br&gt;  - P(complete &gt; 70%) — quality&lt;br&gt;  - P(enjoy) — satisfaction proxy&lt;br&gt;- Weighted combination: 0.4×play + 0.4×complete + 0.2×enjoy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="320" width="320" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="row-generation" value="&lt;b&gt;Stage 3: Row Generation &amp; Page Assembly&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Row types: genre, because-you-watched,&lt;br&gt;  trending, new releases, top-10&lt;br&gt;- Row selection: bandit algorithm (Thompson)&lt;br&gt;- Row ordering: expected engagement&lt;br&gt;- Within-row ranking: personalized&lt;br&gt;- Diversity constraint: genre spread&lt;br&gt;- Artwork personalization (which poster)&lt;br&gt;- Total: 40 rows × 75 items = 3000 slots" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="550" width="320" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Training -->
+        <mxCell id="training-title" value="&lt;b&gt;TRAINING PIPELINE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#f8cecc;strokeColor=#b85450;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="80" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="training-config" value="&lt;b&gt;Training Configuration&lt;/b&gt;&lt;br&gt;&lt;br&gt;- CF model: Spark ALS, 200M users×15K items&lt;br&gt;- Ranking: PyTorch, AdamW (lr=1e-3)&lt;br&gt;- Batch: 8192, GPU cluster (A100)&lt;br&gt;- Sequential model: 12-layer Transformer&lt;br&gt;  - Sequence length: 200 interactions&lt;br&gt;  - Causal masking (next-item prediction)&lt;br&gt;- Training data: 30 days of interactions&lt;br&gt;- Refreshed: CF weekly, Ranker daily" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="120" width="300" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="offline-eval" value="&lt;b&gt;Offline → Online Evaluation&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Offline: Recall@K, NDCG, HR@10&lt;br&gt;- Replay evaluation (counterfactual)&lt;br&gt;- Interleaving experiments (online)&lt;br&gt;- A/B test: member engagement metrics&lt;br&gt;- Long-term: retention, satisfaction survey&lt;br&gt;- Guardrails: diversity, coverage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="310" width="300" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Serving -->
+        <mxCell id="serving-title" value="&lt;b&gt;SERVING ARCHITECTURE&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="470" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="serving" value="&lt;b&gt;Real-Time Serving Flow&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. User request → Load user features (EVCache)&lt;br&gt;2. Candidate retrieval (pre-computed ANN)&lt;br&gt;3. Feature assembly (real-time joins)&lt;br&gt;4. Ranking model inference (GPU)&lt;br&gt;5. Row generation (page optimizer)&lt;br&gt;6. Artwork selection (contextual bandit)&lt;br&gt;7. Assemble JSON response&lt;br&gt;&lt;br&gt;Latency budget: 250ms total&lt;br&gt;Pre-computation: embeddings cached hourly" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="510" width="280" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="artwork" value="&lt;b&gt;Artwork Personalization&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Multiple artwork variants per title&lt;br&gt;- Contextual bandit (per user×title)&lt;br&gt;- Features: genre preference, cast affinity&lt;br&gt;- Thompson Sampling exploration&lt;br&gt;- +20% engagement from personalized art&lt;br&gt;- A/B tested per image variant" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="740" y="510" width="230" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Metrics -->
+        <mxCell id="metrics-title" value="&lt;b&gt;METRICS &amp; TRADEOFFS&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fillColor=#e1d5e7;strokeColor=#9673a6;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="740" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="metrics" value="&lt;b&gt;Evaluation Metrics&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Take rate (plays / impressions)&lt;br&gt;- Effective catalog size (titles played)&lt;br&gt;- Streaming hours (primary business KPI)&lt;br&gt;- Member retention (monthly churn)&lt;br&gt;- Quality plays (&gt;70% completion)&lt;br&gt;- Time to first play (session start)&lt;br&gt;- Diversity (genre entropy of watches)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="440" y="780" width="260" height="155" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tradeoffs" value="&lt;b&gt;Key Tradeoffs&lt;/b&gt;&lt;br&gt;&lt;br&gt;- Exploitation vs Exploration (bandits)&lt;br&gt;- Short-term engagement vs Long-term retention&lt;br&gt;- Popularity bias vs Catalog coverage&lt;br&gt;- Personalization depth vs Cold start&lt;br&gt;- Real-time freshness vs Pre-computation&lt;br&gt;- Model complexity vs Serving latency&lt;br&gt;- Content investment ROI vs User taste" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=5;" vertex="1" parent="1">
+          <mxGeometry x="720" y="780" width="270" height="155" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="user-features" target="candidate-gen" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="item-features" target="candidate-gen" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="candidate-gen" target="ranking-model" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="ranking-model" target="row-generation" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" edge="1" source="row-generation" target="serving" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
